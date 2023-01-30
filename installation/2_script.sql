@@ -1,18 +1,14 @@
---SQL to be executed during Module installation must be placed in the numbered *.sql files.
---Each file can include a single PL/SQL block
---PL/SQL block termination characters are not supported
---PL/SQL will be executed in the _pkg DB schema
---In case of error, module installation cannot proceed
---Below is the sample code to add existing Trackor Type into the Tree:
 declare
     c_rel_cardinality_one_many constant number := 2;
-    v_jurisdiction_ttid xitor_type.xitor_type_id%type;
+    v_users_ttid xitor_type.xitor_type_id%type;
     v_rtid1 relation_type.relation_type_id%type;
 begin
     select xitor_type_id 
-      into v_jurisdiction_ttid
+      into v_users_ttid
       from xitor_type
-     where xitor_type = 'Jurisdiction';
+     where xitor_type = 'Users';
      
-    v_rtid1 := pkg_relation.new_relation_type(null, v_jurisdiction_ttid, c_rel_cardinality_one_many, 0, 0);
+    v_rtid1 := pkg_relation.new_relation_type(null, v_users_ttid, c_rel_cardinality_one_many, 0, 0);
+    
+    dbms_output.put_line('Relation has been created'|| chr(13) || chr(10));
 end;
