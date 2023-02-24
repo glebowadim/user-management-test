@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><COMPONENTS author="user_managment_02_admin" description="" name="090.Rules.xml" site="http&#x3a;&#x2f;&#x2f;dev2.vqs.net&#x3a;8080" ts="" ><RULES>
+<?xml version="1.0" encoding="UTF-8"?><COMPONENTS author="user_managment_02_admin" description="" name="100.Rules.xml" site="http&#x3a;&#x2f;&#x2f;dev2.vqs.net&#x3a;8080" ts="" ><RULES>
  <RULES_ITEM>
   <IS_ASYNC>0</IS_ASYNC>
   <IS_ENABLED>1</IS_ENABLED>
@@ -465,7 +465,7 @@ end;</SQL_TEXT>
  <RULES_ITEM>
   <IS_ASYNC>0</IS_ASYNC>
   <IS_ENABLED>1</IS_ENABLED>
-  <RULE>UMGMT Update UMGMT_US_USER_CLASS cfu</RULE>
+  <RULE>UMGMT Update User Class cfu</RULE>
   <RULE_CLASS_ID>1</RULE_CLASS_ID>
   <RULE_ID>10009671321</RULE_ID>
   <RULE_TYPE>
@@ -546,7 +546,7 @@ end;</SQL_TEXT>
 </DESCRIPTION>
     <BLOB_DATA/>
     <PROGRAM_ID>1000979402</PROGRAM_ID>
-    <NAME>UMGMT Update UMGMT_US_USER_CLASS cfu</NAME>
+    <NAME>UMGMT Update User Class cfu</NAME>
     <APP_LABEL/>
    </T_BPD_ITEM>
   </BPD_ITEMS>
@@ -585,7 +585,7 @@ end;</SQL_TEXT>
  <RULES_ITEM>
   <IS_ASYNC>0</IS_ASYNC>
   <IS_ENABLED>1</IS_ENABLED>
-  <RULE>UMGMT Update UMGMT_US_USER_CLASS nightly</RULE>
+  <RULE>UMGMT Update User Class nightly</RULE>
   <RULE_CLASS_ID>1</RULE_CLASS_ID>
   <RULE_ID>10009671322</RULE_ID>
   <RULE_TYPE>
@@ -671,7 +671,7 @@ end;</SQL_TEXT>
 </DESCRIPTION>
     <BLOB_DATA/>
     <PROGRAM_ID>1000979402</PROGRAM_ID>
-    <NAME>UMGMT Update UMGMT_US_USER_CLASS nightly</NAME>
+    <NAME>UMGMT Update User Class nightly</NAME>
     <APP_LABEL/>
    </T_BPD_ITEM>
   </BPD_ITEMS>
@@ -705,7 +705,7 @@ end;</SQL_TEXT>
  <RULES_ITEM>
   <IS_ASYNC>0</IS_ASYNC>
   <IS_ENABLED>1</IS_ENABLED>
-  <RULE>UMGMT Update UMGMT_US_USER_CLASS </RULE>
+  <RULE>UMGMT Update User Class</RULE>
   <RULE_CLASS_ID>1</RULE_CLASS_ID>
   <RULE_ID>10009671323</RULE_ID>
   <RULE_TYPE>
@@ -786,7 +786,7 @@ end;</SQL_TEXT>
 </DESCRIPTION>
     <BLOB_DATA/>
     <PROGRAM_ID>1000979402</PROGRAM_ID>
-    <NAME>UMGMT Update UMGMT_US_USER_CLASS </NAME>
+    <NAME>UMGMT Update User Class</NAME>
     <APP_LABEL/>
    </T_BPD_ITEM>
   </BPD_ITEMS>
@@ -1079,7 +1079,7 @@ end;</SQL_TEXT>
  <RULES_ITEM>
   <IS_ASYNC>0</IS_ASYNC>
   <IS_ENABLED>1</IS_ENABLED>
-  <RULE>UMGMT Update US_USER_CLASS uu</RULE>
+  <RULE>UMGMT Update User Class uu</RULE>
   <RULE_CLASS_ID>1</RULE_CLASS_ID>
   <RULE_ID>10009671326</RULE_ID>
   <RULE_TYPE>
@@ -1161,7 +1161,7 @@ end;</SQL_TEXT>
 </DESCRIPTION>
     <BLOB_DATA/>
     <PROGRAM_ID>1000979402</PROGRAM_ID>
-    <NAME>UMGMT Update US_USER_CLASS uu</NAME>
+    <NAME>UMGMT Update User Class uu</NAME>
     <APP_LABEL/>
    </T_BPD_ITEM>
   </BPD_ITEMS>
@@ -1848,7 +1848,7 @@ end;</SQL_TEXT>
  <RULES_ITEM>
   <IS_ASYNC>0</IS_ASYNC>
   <IS_ENABLED>1</IS_ENABLED>
-  <RULE>UMGMT Update UMGMT_US_USER_CLASS fb</RULE>
+  <RULE>UMGMT Update User Class fb</RULE>
   <RULE_CLASS_ID>1</RULE_CLASS_ID>
   <RULE_ID>10009671336</RULE_ID>
   <RULE_PARAM>
@@ -1926,7 +1926,7 @@ end;</SQL_TEXT>
 </DESCRIPTION>
     <BLOB_DATA/>
     <PROGRAM_ID>1000979402</PROGRAM_ID>
-    <NAME>UMGMT Update UMGMT_US_USER_CLASS fb</NAME>
+    <NAME>UMGMT Update User Class fb</NAME>
     <APP_LABEL/>
    </T_BPD_ITEM>
   </BPD_ITEMS>

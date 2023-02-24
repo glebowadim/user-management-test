@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><COMPONENTS author="user_managment_02_admin" description="" name="040.Import.xml" site="http&#x3a;&#x2f;&#x2f;dev2.vqs.net&#x3a;8080" ts="" ><IMPORT>
+<?xml version="1.0" encoding="UTF-8"?><COMPONENTS author="user_managment_02_admin" description="" name="070.Import.xml" site="http&#x3a;&#x2f;&#x2f;dev2.vqs.net&#x3a;8080" ts="" ><IMPORT>
  <IMPORT_ITEM>
   <DATE_FORMAT>MM/DD/YY</DATE_FORMAT>
   <DESCRIPTION>Create/update OneVizion user accounts, user Trackor records, and user settings
@@ -51,7 +51,7 @@ Note: UN - is a name of a user;
    <DELIMITER>[44]</DELIMITER>
    <DESCRIPTION>Comma</DESCRIPTION>
   </LINE_DELIMITER>
-  <NAME>User Load</NAME>
+  <NAME>UMGMT User Load</NAME>
   <STRING_QUOTE>
    <DELIMITER>[34]</DELIMITER>
    <DESCRIPTION>Double Quotes</DESCRIPTION>
@@ -87,7 +87,7 @@ Note: UN - is a name of a user;
     <ITEM_STATUS_ID>1</ITEM_STATUS_ID>
     <BLOB_DATA/>
     <PROGRAM_ID>1000979402</PROGRAM_ID>
-    <NAME>User Load</NAME>
+    <NAME>UMGMT User Load</NAME>
     <APP_LABEL/>
    </T_BPD_ITEM>
   </BPD_ITEMS>
