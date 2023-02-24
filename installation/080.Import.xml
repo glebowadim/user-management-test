@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><COMPONENTS author="user_managment_02_admin" description="" name="040.Import.xml" site="http&#x3a;&#x2f;&#x2f;dev2.vqs.net&#x3a;8080" ts="" ><IMPORT>
+ <IMPORT_ITEM>
+  <DATE_FORMAT>MM/DD/YY</DATE_FORMAT>
+  <DESCRIPTION>Create/update OneVizion user accounts, user Trackor records, and user settings
+
+Expected header:
+  UN,EMAIL,IS_DISABLED,MUST_CHANGE_PASSWORD,IS_SUPERUSER,
+  APPLICATION(or APPLICATION_ID or Menu),
+  IS_EXTERNAL_LOGIN,IS_ADD_QUOTE_DELIM,IS_AUTO_SAVE_TB_GRID_CHANGES,
+  CHECKBOX_MODE(or CHECKBOX_MODE_ID),CLICK_ON_PHOTO_MODE(or CLICK_ON_PHOTO_MODE_ID),
+  CONFIG_SESSION,IS_CONFIRM_COLUMN_CLICK,
+  COORDINATE_MODE(or COORDINATE_MODE_ID),DATE_FORMAT,DEFAULT_PAGE(or DEFAULT_PAGE_ID),
+  IS_EXACT_SEARCH_CLIPBOARD,FV_LIST_MODE(or FV_LIST_MODE_ID),
+  FONT_SMOOTHING,IS_COMMENTS_ON_MOUSE_OVER,
+  GRID_EDIT_MODE(or GRID_EDIT_MODE_ID),IS_GROUP_NOTIF_EMAILS,
+  IS_HIDE_START_DATE,IS_MUTE_NEW_EVENTS,
+  APP_LANG_NAME(or APP_LANG_ID),
+  IS_REORDER_TASKS_IN_CSV,IS_SHOW_FORM_NUMBERS,
+  IS_SHOW_TIP_OF_THE_DAY,THOUSANDS_SEPARATOR,
+  TIME_FORMAT,OWNER_XITOR_TYPE,
+  Security Role 1,Security Role 2,Security Role 3,
+  Global Views,Global Filters,
+  Discipline 1,Discipline 2,Discipline 3
+
+Note: UN - is a name of a user;
+  PWD - is a user password, if it is not specified then Administrator can change it from Admin Account page;
+  Security Role - is a name of a security role;
+  APPLICATION (or APPLICATION_ID or Menu) - is a name of an application menu;
+  Global Views - is a boolean parameter to assign global views to a user, it has to be as &apos;0&apos; or &apos;1&apos;;
+  Global Filters - is a boolean parameter to assign global filters to a user, it has to be as &apos;0&apos; or &apos;1&apos;;
+  Discipline - is a name of a discipline.
+  OWNER_XITOR_TYPE - is a name of owner trackor type for user.
+
+  Supports import of Config Field values to the User Trackor
+  Supports relations creation between User and parent Trackor Records
+  You have to use Trackor Type Name as Excel column name to create relation between this trackor type and &quot;USER&quot; trackor type
+  To create template file for impor you can use the export data from &quot;Administer account&quot; page and &quot;User&quot; trackor type page</DESCRIPTION>
+  <EXTERNAL_PROC>pkg_ext_imp.USERSLOAD(:rid,1,id.umgmt_users.tt,&apos;XITOR_KEY&apos;);</EXTERNAL_PROC>
+  <FIELD_DELIMITER>
+   <DELIMITER>[44]</DELIMITER>
+   <DESCRIPTION>Comma</DESCRIPTION>
+  </FIELD_DELIMITER>
+  <IMP_ACTION>2,3,4</IMP_ACTION>
+  <IMP_FILE_TYPE>
+   <IMP_FILE_TYPE_ID>1</IMP_FILE_TYPE_ID>
+   <IMP_FILE_TYPE>CSV</IMP_FILE_TYPE>
+  </IMP_FILE_TYPE>
+  <IMP_SPEC_ID>1001038691</IMP_SPEC_ID>
+  <KEEP_SQL_LOADER_EXT_TABLE>0</KEEP_SQL_LOADER_EXT_TABLE>
+  <LINE_DELIMITER>
+   <DELIMITER>[44]</DELIMITER>
+   <DESCRIPTION>Comma</DESCRIPTION>
+  </LINE_DELIMITER>
+  <NAME>User Load</NAME>
+  <STRING_QUOTE>
+   <DELIMITER>[34]</DELIMITER>
+   <DESCRIPTION>Double Quotes</DESCRIPTION>
+  </STRING_QUOTE>
+  <USE_SQL_LOADER>0</USE_SQL_LOADER>
+  <IMP_COLUMNS>
+   <T_IMP_COLUMN>
+    <IMP_COLUMN_ID>1001158731</IMP_COLUMN_ID>
+    <ORDER_NUMBER>0</ORDER_NUMBER>
+    <NAME>XITOR_KEY</NAME>
+   </T_IMP_COLUMN>
+  </IMP_COLUMNS>
+  <IMP_ENTITYS/>
+  <PROGRAM_ID>1000979402</PROGRAM_ID>
+  <TIME_FORMAT>HH24:MI:SS</TIME_FORMAT>
+  <VALIDATE_DATA_MODE_ID>2</VALIDATE_DATA_MODE_ID>
+  <COMPONENT_PACKAGES>
+   <T_BPL_COMP_PKG>
+    <COMPONENT_ID>1</COMPONENT_ID>
+    <OBJECT_ID>1001038691</OBJECT_ID>
+    <COMPONENTS_PACKAGE_ID>189555</COMPONENTS_PACKAGE_ID>
+    <NAME>VP - User Management</NAME>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <BPD_ITEMS/>
+    <IS_LOCKED>0</IS_LOCKED>
+   </T_BPL_COMP_PKG>
+  </COMPONENT_PACKAGES>
+  <BPD_ITEMS>
+   <T_BPD_ITEM>
+    <ITEM_ID>1000913884015</ITEM_ID>
+    <PKEY>1001038691</PKEY>
+    <ITEM_TYPE_ID>6</ITEM_TYPE_ID>
+    <ITEM_STATUS_ID>1</ITEM_STATUS_ID>
+    <BLOB_DATA/>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <NAME>User Load</NAME>
+    <APP_LABEL/>
+   </T_BPD_ITEM>
+  </BPD_ITEMS>
+ </IMPORT_ITEM>
+</IMPORT>
+</COMPONENTS>

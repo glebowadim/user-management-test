@@ -1,0 +1,2410 @@
+<?xml version="1.0" encoding="UTF-8"?><COMPONENTS author="user_managment_02_admin" description="" name="090.Rules.xml" site="http&#x3a;&#x2f;&#x2f;dev2.vqs.net&#x3a;8080" ts="" ><RULES>
+ <RULES_ITEM>
+  <IS_ASYNC>0</IS_ASYNC>
+  <IS_ENABLED>1</IS_ENABLED>
+  <RULE>UMGMT Check Password Strength</RULE>
+  <RULE_CLASS_ID>1</RULE_CLASS_ID>
+  <RULE_ID>10009671316</RULE_ID>
+  <RULE_TYPE>
+   <RULE_TYPE_ID>5</RULE_TYPE_ID>
+   <RULE_TYPE>After User Password Update</RULE_TYPE>
+   <ID_FIELD>USER_ID</ID_FIELD>
+   <TYPE_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6415</APP_LABEL_ID>
+     <LABEL_TEXT>User Password Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6415</APP_LABEL_ID>
+     <LABEL_TEXT>User Password Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6415</APP_LABEL_ID>
+     <LABEL_TEXT>User Password Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6415</APP_LABEL_ID>
+     <LABEL_TEXT>User Password Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+   </TYPE_LABELS>
+   <DESC_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6444</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a user&apos;s password is changed.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6444</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a user&apos;s password is changed.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6444</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a user&apos;s password is changed.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6444</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a user&apos;s password is changed.</LABEL_TEXT>
+    </T_LABEL>
+   </DESC_LABELS>
+  </RULE_TYPE>
+  <SQL_TEXT>begin
+    user_management.check_password_strength;
+end;</SQL_TEXT>
+  <WARNING_LABEL/>
+  <RULE_CLASS_PARAM_VALS/>
+  <RULE_HTTPCALLS/>
+  <RULE_HTTPCALL_PARAMS/>
+  <BPD_ITEMS>
+   <T_BPD_ITEM>
+    <ITEM_ID>1000913884014</ITEM_ID>
+    <PKEY>10009671316</PKEY>
+    <ITEM_TYPE_ID>9</ITEM_TYPE_ID>
+    <ITEM_STATUS_ID>1</ITEM_STATUS_ID>
+    <DESCRIPTION>&lt;p&gt;Rule for checking&amp;nbsp;Password Strength on it&amp;#39;s update&lt;/p&gt;
+</DESCRIPTION>
+    <BLOB_DATA/>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <NAME>UMGMT Check Password Strength</NAME>
+    <APP_LABEL/>
+   </T_BPD_ITEM>
+  </BPD_ITEMS>
+  <RULE_GEOCODING/>
+  <RULE_MAP_SNIPPETS/>
+  <PROGRAM_ID>1000979402</PROGRAM_ID>
+  <RULE_TYPE_ID>5</RULE_TYPE_ID>
+  <RULE_TOWER_GROUPS/>
+  <COMPONENT_PACKAGES>
+   <T_BPL_COMP_PKG>
+    <COMPONENT_ID>4</COMPONENT_ID>
+    <OBJECT_ID>10009671316</OBJECT_ID>
+    <COMPONENTS_PACKAGE_ID>189555</COMPONENTS_PACKAGE_ID>
+    <NAME>VP - User Management</NAME>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <BPD_ITEMS/>
+    <IS_LOCKED>0</IS_LOCKED>
+   </T_BPL_COMP_PKG>
+  </COMPONENT_PACKAGES>
+  <CONFIG_FIELD_IDNUMS/>
+  <TASK_DATE_IDNUMS/>
+  <TASK_IDNUMS/>
+  <TRACKOR_TYPE_IDNUMS/>
+  <RELATION_TYPE_IDNUMS/>
+  <WP_TEMPLATE_IDNUMS/>
+  <WF_TEMPLATE_IDNUMS/>
+  <IMPORT_IDNUMS/>
+  <REPORT_IDNUMS/>
+  <COMPONENT_LABELS/>
+ </RULES_ITEM>
+ <RULES_ITEM>
+  <IS_ASYNC>0</IS_ASYNC>
+  <IS_ENABLED>1</IS_ENABLED>
+  <RULE>UMGMT Lock User&apos;s Account</RULE>
+  <RULE_CLASS_ID>1</RULE_CLASS_ID>
+  <RULE_ID>10009671317</RULE_ID>
+  <RULE_TYPE>
+   <RULE_TYPE_ID>45</RULE_TYPE_ID>
+   <RULE_TYPE>After Login Attempt</RULE_TYPE>
+   <ID_FIELD>USER_ID, LOGIN_SUCCESSFUL</ID_FIELD>
+   <TYPE_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6436</APP_LABEL_ID>
+     <LABEL_TEXT>Login Attempted (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6436</APP_LABEL_ID>
+     <LABEL_TEXT>Login Attempted (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6436</APP_LABEL_ID>
+     <LABEL_TEXT>Login Attempted (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6436</APP_LABEL_ID>
+     <LABEL_TEXT>Login Attempted (After)</LABEL_TEXT>
+    </T_LABEL>
+   </TYPE_LABELS>
+   <DESC_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6465</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a user inputs a username/password combination to login to the site (successful or unsuccessful).</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6465</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a user inputs a username/password combination to login to the site (successful or unsuccessful).</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6465</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a user inputs a username/password combination to login to the site (successful or unsuccessful).</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6465</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a user inputs a username/password combination to login to the site (successful or unsuccessful).</LABEL_TEXT>
+    </T_LABEL>
+   </DESC_LABELS>
+  </RULE_TYPE>
+  <SQL_TEXT>begin
+    user_management.lock_user(:user_id);
+end;</SQL_TEXT>
+  <WARNING_LABEL/>
+  <RULE_CLASS_PARAM_VALS/>
+  <RULE_HTTPCALLS/>
+  <RULE_HTTPCALL_PARAMS/>
+  <BPD_ITEMS>
+   <T_BPD_ITEM>
+    <ITEM_ID>1000913884007</ITEM_ID>
+    <PKEY>10009671317</PKEY>
+    <ITEM_TYPE_ID>9</ITEM_TYPE_ID>
+    <ITEM_STATUS_ID>1</ITEM_STATUS_ID>
+    <DESCRIPTION>&lt;p&gt;Locks user&amp;#39;s account after set number of incorrect login attempts.&lt;/p&gt;
+</DESCRIPTION>
+    <BLOB_DATA/>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <NAME>UMGMT Lock User&apos;s Account</NAME>
+    <APP_LABEL/>
+   </T_BPD_ITEM>
+  </BPD_ITEMS>
+  <RULE_GEOCODING/>
+  <RULE_MAP_SNIPPETS/>
+  <PROGRAM_ID>1000979402</PROGRAM_ID>
+  <RULE_TYPE_ID>45</RULE_TYPE_ID>
+  <RULE_TOWER_GROUPS/>
+  <COMPONENT_PACKAGES>
+   <T_BPL_COMP_PKG>
+    <COMPONENT_ID>4</COMPONENT_ID>
+    <OBJECT_ID>10009671317</OBJECT_ID>
+    <COMPONENTS_PACKAGE_ID>189555</COMPONENTS_PACKAGE_ID>
+    <NAME>VP - User Management</NAME>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <BPD_ITEMS/>
+    <IS_LOCKED>0</IS_LOCKED>
+   </T_BPL_COMP_PKG>
+  </COMPONENT_PACKAGES>
+  <CONFIG_FIELD_IDNUMS/>
+  <TASK_DATE_IDNUMS/>
+  <TASK_IDNUMS/>
+  <TRACKOR_TYPE_IDNUMS/>
+  <RELATION_TYPE_IDNUMS/>
+  <WP_TEMPLATE_IDNUMS/>
+  <WF_TEMPLATE_IDNUMS/>
+  <IMPORT_IDNUMS/>
+  <REPORT_IDNUMS/>
+  <COMPONENT_LABELS/>
+ </RULES_ITEM>
+ <RULES_ITEM>
+  <IS_ASYNC>0</IS_ASYNC>
+  <IS_ENABLED>1</IS_ENABLED>
+  <RULE>UMGMT Prevent Users from being Deleted</RULE>
+  <RULE_CLASS_ID>1</RULE_CLASS_ID>
+  <RULE_ID>10009671318</RULE_ID>
+  <RULE_TYPE>
+   <RULE_TYPE_ID>20</RULE_TYPE_ID>
+   <RULE_TYPE>Before Trackor Delete</RULE_TYPE>
+   <ID_FIELD>XITOR_ID</ID_FIELD>
+   <TEMPLATE_SQL>select xitor_type_id as &quot;Xitor Type ID&quot;,
+       xitor_type as &quot;Xitor Type&quot;,
+       xitor_type_id as &quot;Xitor Type Id&quot;
+from xitor_type</TEMPLATE_SQL>
+   <TYPE_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6422</APP_LABEL_ID>
+     <LABEL_TEXT>Trackor Deleted (Before)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6422</APP_LABEL_ID>
+     <LABEL_TEXT>Trackor Deleted (Before)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6422</APP_LABEL_ID>
+     <LABEL_TEXT>Trackor Deleted (Before)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6422</APP_LABEL_ID>
+     <LABEL_TEXT>Trackor Deleted (Before)</LABEL_TEXT>
+    </T_LABEL>
+   </TYPE_LABELS>
+   <DESC_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6451</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a Trackor is about to be deleted.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6451</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a Trackor is about to be deleted.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6451</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a Trackor is about to be deleted.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6451</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a Trackor is about to be deleted.</LABEL_TEXT>
+    </T_LABEL>
+   </DESC_LABELS>
+  </RULE_TYPE>
+  <SQL_TEXT>begin
+    util.raiseerror(-5384831);
+end;</SQL_TEXT>
+  <WARNING_LABEL/>
+  <RULE_CLASS_PARAM_VALS/>
+  <RULE_HTTPCALLS/>
+  <RULE_HTTPCALL_PARAMS/>
+  <BPD_ITEMS>
+   <T_BPD_ITEM>
+    <ITEM_ID>1000913883988</ITEM_ID>
+    <PKEY>10009671318</PKEY>
+    <ITEM_TYPE_ID>9</ITEM_TYPE_ID>
+    <ITEM_STATUS_ID>1</ITEM_STATUS_ID>
+    <DESCRIPTION>&lt;p&gt;Prevents deletion of Users&lt;/p&gt;
+</DESCRIPTION>
+    <BLOB_DATA/>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <NAME>UMGMT Prevent Users from being Deleted</NAME>
+    <APP_LABEL/>
+   </T_BPD_ITEM>
+  </BPD_ITEMS>
+  <RULE_GEOCODING/>
+  <RULE_MAP_SNIPPETS/>
+  <PROGRAM_ID>1000979402</PROGRAM_ID>
+  <RULE_TYPE_ID>20</RULE_TYPE_ID>
+  <RULE_TOWER_GROUPS/>
+  <COMPONENT_PACKAGES>
+   <T_BPL_COMP_PKG>
+    <COMPONENT_ID>4</COMPONENT_ID>
+    <OBJECT_ID>10009671318</OBJECT_ID>
+    <COMPONENTS_PACKAGE_ID>189555</COMPONENTS_PACKAGE_ID>
+    <NAME>VP - User Management</NAME>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <BPD_ITEMS/>
+    <IS_LOCKED>0</IS_LOCKED>
+   </T_BPL_COMP_PKG>
+  </COMPONENT_PACKAGES>
+  <CONFIG_FIELD_IDNUMS/>
+  <TASK_DATE_IDNUMS/>
+  <TASK_IDNUMS/>
+  <TRACKOR_TYPE_IDNUMS>
+   <VARCHAR2>UMGMT_Users</VARCHAR2>
+  </TRACKOR_TYPE_IDNUMS>
+  <RELATION_TYPE_IDNUMS/>
+  <WP_TEMPLATE_IDNUMS/>
+  <WF_TEMPLATE_IDNUMS/>
+  <IMPORT_IDNUMS/>
+  <REPORT_IDNUMS/>
+  <COMPONENT_LABELS>
+   <LIST_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>-5384831</APP_LABEL_ID>
+     <LABEL_TEXT>You can&apos;t delete Users trackors, they can only be disabled!</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>-5384831</APP_LABEL_ID>
+     <LABEL_TEXT>You can&apos;t delete Users trackors, they can only be disabled!</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>-5384831</APP_LABEL_ID>
+     <LABEL_TEXT>You can&apos;t delete Users trackors, they can only be disabled!</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>-5384831</APP_LABEL_ID>
+     <LABEL_TEXT>You can&apos;t delete Users trackors, they can only be disabled!</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>20</APP_LANG_ID>
+     <APP_LABEL_ID>-5384831</APP_LABEL_ID>
+     <LABEL_TEXT>You can&apos;t delete Users trackors, they can only be disabled!</LABEL_TEXT>
+    </T_LABEL>
+   </LIST_LABEL>
+  </COMPONENT_LABELS>
+ </RULES_ITEM>
+ <RULES_ITEM>
+  <IS_ASYNC>0</IS_ASYNC>
+  <IS_ENABLED>1</IS_ENABLED>
+  <RULE>UMGMT Update User Flags nightly</RULE>
+  <RULE_CLASS_ID>1</RULE_CLASS_ID>
+  <RULE_ID>10009671320</RULE_ID>
+  <RULE_TYPE>
+   <RULE_TYPE_ID>1031823</RULE_TYPE_ID>
+   <RULE_TYPE>Execute Nightly</RULE_TYPE>
+   <REPEAT_INTERVAL>FREQ=DAILY;BYHOUR=4;</REPEAT_INTERVAL>
+   <START_DATE>02/18/2020 11:32:00</START_DATE>
+   <TYPE_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>-5384832</APP_LABEL_ID>
+     <LABEL_TEXT>Execute Nightly</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>-5384832</APP_LABEL_ID>
+     <LABEL_TEXT>Execute Nightly</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>-5384832</APP_LABEL_ID>
+     <LABEL_TEXT>Execute Nightly</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>-5384832</APP_LABEL_ID>
+     <LABEL_TEXT>야간 실행</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>20</APP_LANG_ID>
+     <APP_LABEL_ID>-5384832</APP_LABEL_ID>
+     <LABEL_TEXT>Exécuter la nuit</LABEL_TEXT>
+    </T_LABEL>
+   </TYPE_LABELS>
+   <DESC_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>-5384833</APP_LABEL_ID>
+     <LABEL_TEXT>Execute Nightly at Midnight</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>-5384833</APP_LABEL_ID>
+     <LABEL_TEXT>Execute Nightly at Midnight</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>-5384833</APP_LABEL_ID>
+     <LABEL_TEXT>Execute Nightly at Midnight</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>-5384833</APP_LABEL_ID>
+     <LABEL_TEXT>야간 자정 실행</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>20</APP_LANG_ID>
+     <APP_LABEL_ID>-5384833</APP_LABEL_ID>
+     <LABEL_TEXT>Exécuter la nuit à minuit</LABEL_TEXT>
+    </T_LABEL>
+   </DESC_LABELS>
+  </RULE_TYPE>
+  <SQL_TEXT>begin
+    for rec in (
+        select xitor_id
+          from users
+         where xitor_id is not null
+    ) loop
+        user_management.user_flags(rec.xitor_id);
+    end loop;
+end;</SQL_TEXT>
+  <WARNING_LABEL/>
+  <RULE_CLASS_PARAM_VALS/>
+  <RULE_HTTPCALLS/>
+  <RULE_HTTPCALL_PARAMS/>
+  <BPD_ITEMS>
+   <T_BPD_ITEM>
+    <ITEM_ID>1000913883990</ITEM_ID>
+    <PKEY>10009671320</PKEY>
+    <ITEM_TYPE_ID>9</ITEM_TYPE_ID>
+    <ITEM_STATUS_ID>1</ITEM_STATUS_ID>
+    <DESCRIPTION>&lt;p&gt;Sets the flags for users based on their privileges&lt;/p&gt;
+</DESCRIPTION>
+    <BLOB_DATA/>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <NAME>UMGMT Update User Flags nightly</NAME>
+    <APP_LABEL/>
+   </T_BPD_ITEM>
+  </BPD_ITEMS>
+  <RULE_GEOCODING/>
+  <RULE_MAP_SNIPPETS/>
+  <PROGRAM_ID>1000979402</PROGRAM_ID>
+  <RULE_TYPE_ID>1031823</RULE_TYPE_ID>
+  <RULE_TOWER_GROUPS/>
+  <COMPONENT_PACKAGES>
+   <T_BPL_COMP_PKG>
+    <COMPONENT_ID>4</COMPONENT_ID>
+    <OBJECT_ID>10009671320</OBJECT_ID>
+    <COMPONENTS_PACKAGE_ID>189555</COMPONENTS_PACKAGE_ID>
+    <NAME>VP - User Management</NAME>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <BPD_ITEMS/>
+    <IS_LOCKED>0</IS_LOCKED>
+   </T_BPL_COMP_PKG>
+  </COMPONENT_PACKAGES>
+  <CONFIG_FIELD_IDNUMS/>
+  <TASK_DATE_IDNUMS/>
+  <TASK_IDNUMS/>
+  <TRACKOR_TYPE_IDNUMS/>
+  <RELATION_TYPE_IDNUMS/>
+  <WP_TEMPLATE_IDNUMS/>
+  <WF_TEMPLATE_IDNUMS/>
+  <IMPORT_IDNUMS/>
+  <REPORT_IDNUMS/>
+  <COMPONENT_LABELS/>
+ </RULES_ITEM>
+ <RULES_ITEM>
+  <IS_ASYNC>0</IS_ASYNC>
+  <IS_ENABLED>1</IS_ENABLED>
+  <RULE>UMGMT Update UMGMT_US_USER_CLASS cfu</RULE>
+  <RULE_CLASS_ID>1</RULE_CLASS_ID>
+  <RULE_ID>10009671321</RULE_ID>
+  <RULE_TYPE>
+   <RULE_TYPE_ID>8</RULE_TYPE_ID>
+   <RULE_TYPE>After Configured Field Update</RULE_TYPE>
+   <ID_FIELD>PK</ID_FIELD>
+   <TEMPLATE_SQL>select c.config_field_id as &quot;Config Field ID&quot;,
+c.config_field_name as &quot;Config Field Name&quot;,
+x.xitor_type as &quot;Xitor Type&quot;,
+lbl_pref.label_text || lbl_cf.label_text as &quot;Field Label&quot;,
+c.config_field_id as &quot;Config Field Id&quot;,
+dt.type_name as &quot;Data Type&quot;
+from config_field c
+join xitor_type x on x.xitor_type_id = c.xitor_type_id
+join config_field_data_type dt on dt.config_field_data_type_id = c.data_type
+left join vw_label lbl_cf on c.app_label_id = lbl_cf.label_id and lbl_cf.app_lang_id = :p_lang_id
+left join vw_label lbl_pref on x.prefix_label_id = lbl_pref.label_id and lbl_pref.app_lang_id = :p_lang_id
+where c.is_static = 0 or c.config_field_name in (&apos;XITOR_KEY&apos;,&apos;XITOR_CLASS_ID&apos;)</TEMPLATE_SQL>
+   <TYPE_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6417</APP_LABEL_ID>
+     <LABEL_TEXT>Field Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6417</APP_LABEL_ID>
+     <LABEL_TEXT>Field Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6417</APP_LABEL_ID>
+     <LABEL_TEXT>Field Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6417</APP_LABEL_ID>
+     <LABEL_TEXT>Field Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+   </TYPE_LABELS>
+   <DESC_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6446</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a Field&apos;s value is changed.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6446</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a Field&apos;s value is changed.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6446</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a Field&apos;s value is changed.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6446</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a Field&apos;s value is changed.</LABEL_TEXT>
+    </T_LABEL>
+   </DESC_LABELS>
+  </RULE_TYPE>
+  <SQL_TEXT>begin       
+    user_management.set_user_class(:pk);
+end;</SQL_TEXT>
+  <WARNING_LABEL/>
+  <RULE_CLASS_PARAM_VALS/>
+  <RULE_HTTPCALLS/>
+  <RULE_HTTPCALL_PARAMS/>
+  <BPD_ITEMS>
+   <T_BPD_ITEM>
+    <ITEM_ID>1000913883991</ITEM_ID>
+    <PKEY>10009671321</PKEY>
+    <ITEM_TYPE_ID>9</ITEM_TYPE_ID>
+    <ITEM_STATUS_ID>1</ITEM_STATUS_ID>
+    <DESCRIPTION>&lt;p&gt;After UMGMT_US_ADMIN_NC is updated, sets UMGMT_US_USER_CLASS based on security role.&lt;/p&gt;
+</DESCRIPTION>
+    <BLOB_DATA/>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <NAME>UMGMT Update UMGMT_US_USER_CLASS cfu</NAME>
+    <APP_LABEL/>
+   </T_BPD_ITEM>
+  </BPD_ITEMS>
+  <RULE_GEOCODING/>
+  <RULE_MAP_SNIPPETS/>
+  <PROGRAM_ID>1000979402</PROGRAM_ID>
+  <RULE_TYPE_ID>8</RULE_TYPE_ID>
+  <RULE_TOWER_GROUPS/>
+  <COMPONENT_PACKAGES>
+   <T_BPL_COMP_PKG>
+    <COMPONENT_ID>4</COMPONENT_ID>
+    <OBJECT_ID>10009671321</OBJECT_ID>
+    <COMPONENTS_PACKAGE_ID>189555</COMPONENTS_PACKAGE_ID>
+    <NAME>VP - User Management</NAME>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <BPD_ITEMS/>
+    <IS_LOCKED>0</IS_LOCKED>
+   </T_BPL_COMP_PKG>
+  </COMPONENT_PACKAGES>
+  <CONFIG_FIELD_IDNUMS>
+   <T_TYPE_SPECIF_OBJ_IDNUM>
+    <XITOR_TYPE>UMGMT_Users</XITOR_TYPE>
+    <OBJECT_NAME>UMGMT_US_ADMIN_NC</OBJECT_NAME>
+   </T_TYPE_SPECIF_OBJ_IDNUM>
+  </CONFIG_FIELD_IDNUMS>
+  <TASK_DATE_IDNUMS/>
+  <TASK_IDNUMS/>
+  <TRACKOR_TYPE_IDNUMS/>
+  <RELATION_TYPE_IDNUMS/>
+  <WP_TEMPLATE_IDNUMS/>
+  <WF_TEMPLATE_IDNUMS/>
+  <IMPORT_IDNUMS/>
+  <REPORT_IDNUMS/>
+  <COMPONENT_LABELS/>
+ </RULES_ITEM>
+ <RULES_ITEM>
+  <IS_ASYNC>0</IS_ASYNC>
+  <IS_ENABLED>1</IS_ENABLED>
+  <RULE>UMGMT Update UMGMT_US_USER_CLASS nightly</RULE>
+  <RULE_CLASS_ID>1</RULE_CLASS_ID>
+  <RULE_ID>10009671322</RULE_ID>
+  <RULE_TYPE>
+   <RULE_TYPE_ID>1031823</RULE_TYPE_ID>
+   <RULE_TYPE>Execute Nightly</RULE_TYPE>
+   <REPEAT_INTERVAL>FREQ=DAILY;BYHOUR=4;</REPEAT_INTERVAL>
+   <START_DATE>02/18/2020 11:32:00</START_DATE>
+   <TYPE_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>-5384832</APP_LABEL_ID>
+     <LABEL_TEXT>Execute Nightly</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>-5384832</APP_LABEL_ID>
+     <LABEL_TEXT>Execute Nightly</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>-5384832</APP_LABEL_ID>
+     <LABEL_TEXT>Execute Nightly</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>-5384832</APP_LABEL_ID>
+     <LABEL_TEXT>야간 실행</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>20</APP_LANG_ID>
+     <APP_LABEL_ID>-5384832</APP_LABEL_ID>
+     <LABEL_TEXT>Exécuter la nuit</LABEL_TEXT>
+    </T_LABEL>
+   </TYPE_LABELS>
+   <DESC_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>-5384833</APP_LABEL_ID>
+     <LABEL_TEXT>Execute Nightly at Midnight</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>-5384833</APP_LABEL_ID>
+     <LABEL_TEXT>Execute Nightly at Midnight</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>-5384833</APP_LABEL_ID>
+     <LABEL_TEXT>Execute Nightly at Midnight</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>-5384833</APP_LABEL_ID>
+     <LABEL_TEXT>야간 자정 실행</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>20</APP_LANG_ID>
+     <APP_LABEL_ID>-5384833</APP_LABEL_ID>
+     <LABEL_TEXT>Exécuter la nuit à minuit</LABEL_TEXT>
+    </T_LABEL>
+   </DESC_LABELS>
+  </RULE_TYPE>
+  <SQL_TEXT>begin
+    for rec in (
+        select xitor_id
+          from users
+         where xitor_id is not null
+    ) loop
+        user_management.set_user_class(rec.xitor_id);
+    end loop;
+end;</SQL_TEXT>
+  <WARNING_LABEL/>
+  <RULE_CLASS_PARAM_VALS/>
+  <RULE_HTTPCALLS/>
+  <RULE_HTTPCALL_PARAMS/>
+  <BPD_ITEMS>
+   <T_BPD_ITEM>
+    <ITEM_ID>1000913883992</ITEM_ID>
+    <PKEY>10009671322</PKEY>
+    <ITEM_TYPE_ID>9</ITEM_TYPE_ID>
+    <ITEM_STATUS_ID>1</ITEM_STATUS_ID>
+    <DESCRIPTION>&lt;p&gt;Sets UMGMT_US_USER_CLASS based on security role.&lt;/p&gt;
+</DESCRIPTION>
+    <BLOB_DATA/>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <NAME>UMGMT Update UMGMT_US_USER_CLASS nightly</NAME>
+    <APP_LABEL/>
+   </T_BPD_ITEM>
+  </BPD_ITEMS>
+  <RULE_GEOCODING/>
+  <RULE_MAP_SNIPPETS/>
+  <PROGRAM_ID>1000979402</PROGRAM_ID>
+  <RULE_TYPE_ID>1031823</RULE_TYPE_ID>
+  <RULE_TOWER_GROUPS/>
+  <COMPONENT_PACKAGES>
+   <T_BPL_COMP_PKG>
+    <COMPONENT_ID>4</COMPONENT_ID>
+    <OBJECT_ID>10009671322</OBJECT_ID>
+    <COMPONENTS_PACKAGE_ID>189555</COMPONENTS_PACKAGE_ID>
+    <NAME>VP - User Management</NAME>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <BPD_ITEMS/>
+    <IS_LOCKED>0</IS_LOCKED>
+   </T_BPL_COMP_PKG>
+  </COMPONENT_PACKAGES>
+  <CONFIG_FIELD_IDNUMS/>
+  <TASK_DATE_IDNUMS/>
+  <TASK_IDNUMS/>
+  <TRACKOR_TYPE_IDNUMS/>
+  <RELATION_TYPE_IDNUMS/>
+  <WP_TEMPLATE_IDNUMS/>
+  <WF_TEMPLATE_IDNUMS/>
+  <IMPORT_IDNUMS/>
+  <REPORT_IDNUMS/>
+  <COMPONENT_LABELS/>
+ </RULES_ITEM>
+ <RULES_ITEM>
+  <IS_ASYNC>0</IS_ASYNC>
+  <IS_ENABLED>1</IS_ENABLED>
+  <RULE>UMGMT Update UMGMT_US_USER_CLASS </RULE>
+  <RULE_CLASS_ID>1</RULE_CLASS_ID>
+  <RULE_ID>10009671323</RULE_ID>
+  <RULE_TYPE>
+   <RULE_TYPE_ID>8</RULE_TYPE_ID>
+   <RULE_TYPE>After Configured Field Update</RULE_TYPE>
+   <ID_FIELD>PK</ID_FIELD>
+   <TEMPLATE_SQL>select c.config_field_id as &quot;Config Field ID&quot;,
+c.config_field_name as &quot;Config Field Name&quot;,
+x.xitor_type as &quot;Xitor Type&quot;,
+lbl_pref.label_text || lbl_cf.label_text as &quot;Field Label&quot;,
+c.config_field_id as &quot;Config Field Id&quot;,
+dt.type_name as &quot;Data Type&quot;
+from config_field c
+join xitor_type x on x.xitor_type_id = c.xitor_type_id
+join config_field_data_type dt on dt.config_field_data_type_id = c.data_type
+left join vw_label lbl_cf on c.app_label_id = lbl_cf.label_id and lbl_cf.app_lang_id = :p_lang_id
+left join vw_label lbl_pref on x.prefix_label_id = lbl_pref.label_id and lbl_pref.app_lang_id = :p_lang_id
+where c.is_static = 0 or c.config_field_name in (&apos;XITOR_KEY&apos;,&apos;XITOR_CLASS_ID&apos;)</TEMPLATE_SQL>
+   <TYPE_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6417</APP_LABEL_ID>
+     <LABEL_TEXT>Field Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6417</APP_LABEL_ID>
+     <LABEL_TEXT>Field Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6417</APP_LABEL_ID>
+     <LABEL_TEXT>Field Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6417</APP_LABEL_ID>
+     <LABEL_TEXT>Field Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+   </TYPE_LABELS>
+   <DESC_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6446</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a Field&apos;s value is changed.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6446</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a Field&apos;s value is changed.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6446</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a Field&apos;s value is changed.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6446</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a Field&apos;s value is changed.</LABEL_TEXT>
+    </T_LABEL>
+   </DESC_LABELS>
+  </RULE_TYPE>
+  <SQL_TEXT>begin
+    user_management.user_class(:pk);
+end;</SQL_TEXT>
+  <WARNING_LABEL/>
+  <RULE_CLASS_PARAM_VALS/>
+  <RULE_HTTPCALLS/>
+  <RULE_HTTPCALL_PARAMS/>
+  <BPD_ITEMS>
+   <T_BPD_ITEM>
+    <ITEM_ID>1000913883993</ITEM_ID>
+    <PKEY>10009671323</PKEY>
+    <ITEM_TYPE_ID>9</ITEM_TYPE_ID>
+    <ITEM_STATUS_ID>1</ITEM_STATUS_ID>
+    <DESCRIPTION>&lt;p&gt;Sets UMGMT_US_USER_CLASS based on security role.&lt;/p&gt;
+</DESCRIPTION>
+    <BLOB_DATA/>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <NAME>UMGMT Update UMGMT_US_USER_CLASS </NAME>
+    <APP_LABEL/>
+   </T_BPD_ITEM>
+  </BPD_ITEMS>
+  <RULE_GEOCODING/>
+  <RULE_MAP_SNIPPETS/>
+  <PROGRAM_ID>1000979402</PROGRAM_ID>
+  <RULE_TYPE_ID>8</RULE_TYPE_ID>
+  <RULE_TOWER_GROUPS/>
+  <COMPONENT_PACKAGES>
+   <T_BPL_COMP_PKG>
+    <COMPONENT_ID>4</COMPONENT_ID>
+    <OBJECT_ID>10009671323</OBJECT_ID>
+    <COMPONENTS_PACKAGE_ID>189555</COMPONENTS_PACKAGE_ID>
+    <NAME>VP - User Management</NAME>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <BPD_ITEMS/>
+    <IS_LOCKED>0</IS_LOCKED>
+   </T_BPL_COMP_PKG>
+  </COMPONENT_PACKAGES>
+  <CONFIG_FIELD_IDNUMS>
+   <T_TYPE_SPECIF_OBJ_IDNUM>
+    <XITOR_TYPE>UMGMT_Users</XITOR_TYPE>
+    <OBJECT_NAME>UMGMT_US_DESKTOP_FULL_USER</OBJECT_NAME>
+   </T_TYPE_SPECIF_OBJ_IDNUM>
+   <T_TYPE_SPECIF_OBJ_IDNUM>
+    <XITOR_TYPE>UMGMT_Users</XITOR_TYPE>
+    <OBJECT_NAME>UMGMT_US_READ_ONLY</OBJECT_NAME>
+   </T_TYPE_SPECIF_OBJ_IDNUM>
+   <T_TYPE_SPECIF_OBJ_IDNUM>
+    <XITOR_TYPE>UMGMT_Users</XITOR_TYPE>
+    <OBJECT_NAME>UMGMT_US_RESET_USER_CLASS</OBJECT_NAME>
+   </T_TYPE_SPECIF_OBJ_IDNUM>
+   <T_TYPE_SPECIF_OBJ_IDNUM>
+    <XITOR_TYPE>UMGMT_Users</XITOR_TYPE>
+    <OBJECT_NAME>UMGMT_US_MOBILE_ONLY</OBJECT_NAME>
+   </T_TYPE_SPECIF_OBJ_IDNUM>
+   <T_TYPE_SPECIF_OBJ_IDNUM>
+    <XITOR_TYPE>UMGMT_Users</XITOR_TYPE>
+    <OBJECT_NAME>UMGMT_US_LIMITED_ACCESS</OBJECT_NAME>
+   </T_TYPE_SPECIF_OBJ_IDNUM>
+   <T_TYPE_SPECIF_OBJ_IDNUM>
+    <XITOR_TYPE>UMGMT_Users</XITOR_TYPE>
+    <OBJECT_NAME>UMGMT_US_ADMIN_NC</OBJECT_NAME>
+   </T_TYPE_SPECIF_OBJ_IDNUM>
+   <T_TYPE_SPECIF_OBJ_IDNUM>
+    <XITOR_TYPE>UMGMT_Users</XITOR_TYPE>
+    <OBJECT_NAME>UMGMT_US_ADMINISTRATOR</OBJECT_NAME>
+   </T_TYPE_SPECIF_OBJ_IDNUM>
+  </CONFIG_FIELD_IDNUMS>
+  <TASK_DATE_IDNUMS/>
+  <TASK_IDNUMS/>
+  <TRACKOR_TYPE_IDNUMS/>
+  <RELATION_TYPE_IDNUMS/>
+  <WP_TEMPLATE_IDNUMS/>
+  <WF_TEMPLATE_IDNUMS/>
+  <IMPORT_IDNUMS/>
+  <REPORT_IDNUMS/>
+  <COMPONENT_LABELS/>
+ </RULES_ITEM>
+ <RULES_ITEM>
+  <IS_ASYNC>0</IS_ASYNC>
+  <IS_ENABLED>1</IS_ENABLED>
+  <RULE>UMGMT Report Usage Statistics Executed send email</RULE>
+  <RULE_CLASS_ID>1</RULE_CLASS_ID>
+  <RULE_ID>10009671324</RULE_ID>
+  <RULE_TYPE>
+   <RULE_TYPE_ID>52</RULE_TYPE_ID>
+   <RULE_TYPE>After Report Executed - Success</RULE_TYPE>
+   <ID_FIELD>PROCESS_ID</ID_FIELD>
+   <TEMPLATE_SQL>select report_file_id as &quot;Report File ID&quot;,
+       report_name as &quot;Report Name&quot;,
+       description as &quot;Report Description&quot;,
+       report_file_id as &quot;Report File Id&quot;
+from report_files</TEMPLATE_SQL>
+   <TYPE_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6475</APP_LABEL_ID>
+     <LABEL_TEXT>Report Executed - Success (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6475</APP_LABEL_ID>
+     <LABEL_TEXT>Report Executed - Success (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6475</APP_LABEL_ID>
+     <LABEL_TEXT>Report Executed - Success (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6475</APP_LABEL_ID>
+     <LABEL_TEXT>Report Executed - Success (After)</LABEL_TEXT>
+    </T_LABEL>
+   </TYPE_LABELS>
+   <DESC_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6476</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when report is successfully run, before report delivery started</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6476</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when report is successfully run, before report delivery started</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6476</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when report is successfully run, before report delivery started</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6476</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when report is successfully run, before report delivery started</LABEL_TEXT>
+    </T_LABEL>
+   </DESC_LABELS>
+  </RULE_TYPE>
+  <SQL_TEXT>begin
+    user_management.reset_password_user_checkbox(:process_id);
+end;</SQL_TEXT>
+  <WARNING_LABEL/>
+  <RULE_CLASS_PARAM_VALS/>
+  <RULE_HTTPCALLS/>
+  <RULE_HTTPCALL_PARAMS/>
+  <BPD_ITEMS>
+   <T_BPD_ITEM>
+    <ITEM_ID>1000913883994</ITEM_ID>
+    <PKEY>10009671324</PKEY>
+    <ITEM_TYPE_ID>9</ITEM_TYPE_ID>
+    <ITEM_STATUS_ID>1</ITEM_STATUS_ID>
+    <DESCRIPTION>&lt;p&gt;Usage Statistics rule, which works on report generation&lt;/p&gt;
+</DESCRIPTION>
+    <BLOB_DATA/>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <NAME>UMGMT Report Usage Statistics Executed send email</NAME>
+    <APP_LABEL/>
+   </T_BPD_ITEM>
+  </BPD_ITEMS>
+  <RULE_GEOCODING/>
+  <RULE_MAP_SNIPPETS/>
+  <PROGRAM_ID>1000979402</PROGRAM_ID>
+  <RULE_TYPE_ID>52</RULE_TYPE_ID>
+  <RULE_TOWER_GROUPS/>
+  <COMPONENT_PACKAGES>
+   <T_BPL_COMP_PKG>
+    <COMPONENT_ID>4</COMPONENT_ID>
+    <OBJECT_ID>10009671324</OBJECT_ID>
+    <COMPONENTS_PACKAGE_ID>189555</COMPONENTS_PACKAGE_ID>
+    <NAME>VP - User Management</NAME>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <BPD_ITEMS/>
+    <IS_LOCKED>0</IS_LOCKED>
+   </T_BPL_COMP_PKG>
+  </COMPONENT_PACKAGES>
+  <CONFIG_FIELD_IDNUMS/>
+  <TASK_DATE_IDNUMS/>
+  <TASK_IDNUMS/>
+  <TRACKOR_TYPE_IDNUMS/>
+  <RELATION_TYPE_IDNUMS/>
+  <WP_TEMPLATE_IDNUMS/>
+  <WF_TEMPLATE_IDNUMS/>
+  <IMPORT_IDNUMS/>
+  <REPORT_IDNUMS>
+   <VARCHAR2>UMGMT Usage Statistics: Website Year Month</VARCHAR2>
+  </REPORT_IDNUMS>
+  <COMPONENT_LABELS/>
+ </RULES_ITEM>
+ <RULES_ITEM>
+  <IS_ASYNC>0</IS_ASYNC>
+  <IS_ENABLED>1</IS_ENABLED>
+  <RULE>UMGMT Reset Password on User Checkbox</RULE>
+  <RULE_CLASS_ID>1</RULE_CLASS_ID>
+  <RULE_ID>10009671325</RULE_ID>
+  <RULE_TYPE>
+   <RULE_TYPE_ID>8</RULE_TYPE_ID>
+   <RULE_TYPE>After Configured Field Update</RULE_TYPE>
+   <ID_FIELD>PK</ID_FIELD>
+   <TEMPLATE_SQL>select c.config_field_id as &quot;Config Field ID&quot;,
+c.config_field_name as &quot;Config Field Name&quot;,
+x.xitor_type as &quot;Xitor Type&quot;,
+lbl_pref.label_text || lbl_cf.label_text as &quot;Field Label&quot;,
+c.config_field_id as &quot;Config Field Id&quot;,
+dt.type_name as &quot;Data Type&quot;
+from config_field c
+join xitor_type x on x.xitor_type_id = c.xitor_type_id
+join config_field_data_type dt on dt.config_field_data_type_id = c.data_type
+left join vw_label lbl_cf on c.app_label_id = lbl_cf.label_id and lbl_cf.app_lang_id = :p_lang_id
+left join vw_label lbl_pref on x.prefix_label_id = lbl_pref.label_id and lbl_pref.app_lang_id = :p_lang_id
+where c.is_static = 0 or c.config_field_name in (&apos;XITOR_KEY&apos;,&apos;XITOR_CLASS_ID&apos;)</TEMPLATE_SQL>
+   <TYPE_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6417</APP_LABEL_ID>
+     <LABEL_TEXT>Field Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6417</APP_LABEL_ID>
+     <LABEL_TEXT>Field Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6417</APP_LABEL_ID>
+     <LABEL_TEXT>Field Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6417</APP_LABEL_ID>
+     <LABEL_TEXT>Field Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+   </TYPE_LABELS>
+   <DESC_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6446</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a Field&apos;s value is changed.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6446</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a Field&apos;s value is changed.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6446</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a Field&apos;s value is changed.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6446</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a Field&apos;s value is changed.</LABEL_TEXT>
+    </T_LABEL>
+   </DESC_LABELS>
+  </RULE_TYPE>
+  <SQL_TEXT>begin
+    user_management.reset_password_user_checkbox(:pk);
+end;</SQL_TEXT>
+  <WARNING_LABEL/>
+  <RULE_CLASS_PARAM_VALS/>
+  <RULE_HTTPCALLS/>
+  <RULE_HTTPCALL_PARAMS/>
+  <BPD_ITEMS>
+   <T_BPD_ITEM>
+    <ITEM_ID>1000913883995</ITEM_ID>
+    <PKEY>10009671325</PKEY>
+    <ITEM_TYPE_ID>9</ITEM_TYPE_ID>
+    <ITEM_STATUS_ID>1</ITEM_STATUS_ID>
+    <DESCRIPTION>&lt;p&gt;Sets new temporary password and emails it to the user when&amp;nbsp;UMGMT_US_RESET_PASSWORD is checked.&lt;/p&gt;
+</DESCRIPTION>
+    <BLOB_DATA/>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <NAME>UMGMT Reset Password on User Checkbox</NAME>
+    <APP_LABEL/>
+   </T_BPD_ITEM>
+  </BPD_ITEMS>
+  <RULE_GEOCODING/>
+  <RULE_MAP_SNIPPETS/>
+  <PROGRAM_ID>1000979402</PROGRAM_ID>
+  <RULE_TYPE_ID>8</RULE_TYPE_ID>
+  <RULE_TOWER_GROUPS/>
+  <COMPONENT_PACKAGES>
+   <T_BPL_COMP_PKG>
+    <COMPONENT_ID>4</COMPONENT_ID>
+    <OBJECT_ID>10009671325</OBJECT_ID>
+    <COMPONENTS_PACKAGE_ID>189555</COMPONENTS_PACKAGE_ID>
+    <NAME>VP - User Management</NAME>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <BPD_ITEMS/>
+    <IS_LOCKED>0</IS_LOCKED>
+   </T_BPL_COMP_PKG>
+  </COMPONENT_PACKAGES>
+  <CONFIG_FIELD_IDNUMS>
+   <T_TYPE_SPECIF_OBJ_IDNUM>
+    <XITOR_TYPE>UMGMT_Users</XITOR_TYPE>
+    <OBJECT_NAME>UMGMT_US_RESET_PASSWORD</OBJECT_NAME>
+   </T_TYPE_SPECIF_OBJ_IDNUM>
+  </CONFIG_FIELD_IDNUMS>
+  <TASK_DATE_IDNUMS/>
+  <TASK_IDNUMS/>
+  <TRACKOR_TYPE_IDNUMS/>
+  <RELATION_TYPE_IDNUMS/>
+  <WP_TEMPLATE_IDNUMS/>
+  <WF_TEMPLATE_IDNUMS/>
+  <IMPORT_IDNUMS/>
+  <REPORT_IDNUMS/>
+  <COMPONENT_LABELS/>
+ </RULES_ITEM>
+ <RULES_ITEM>
+  <IS_ASYNC>0</IS_ASYNC>
+  <IS_ENABLED>1</IS_ENABLED>
+  <RULE>UMGMT Update US_USER_CLASS uu</RULE>
+  <RULE_CLASS_ID>1</RULE_CLASS_ID>
+  <RULE_ID>10009671326</RULE_ID>
+  <RULE_TYPE>
+   <RULE_TYPE_ID>25</RULE_TYPE_ID>
+   <RULE_TYPE>After User Update</RULE_TYPE>
+   <ID_FIELD>USER_ID</ID_FIELD>
+   <TYPE_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6426</APP_LABEL_ID>
+     <LABEL_TEXT>User Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6426</APP_LABEL_ID>
+     <LABEL_TEXT>User Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6426</APP_LABEL_ID>
+     <LABEL_TEXT>User Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6426</APP_LABEL_ID>
+     <LABEL_TEXT>User Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+   </TYPE_LABELS>
+   <DESC_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6455</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a user is updated.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6455</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a user is updated.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6455</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a user is updated.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6455</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a user is updated.</LABEL_TEXT>
+    </T_LABEL>
+   </DESC_LABELS>
+  </RULE_TYPE>
+  <SQL_TEXT>declare
+    v_user_trackor_id xitor.xitor_id%type;
+begin
+        
+    select xitor_id
+      into v_user_trackor_id
+      from users
+     where user_id = :user_id;
+    
+    if v_user_trackor_id is null then
+        return;
+    end if;
+    
+    user_management.set_user_class(v_user_trackor_id);
+    
+end;</SQL_TEXT>
+  <WARNING_LABEL/>
+  <RULE_CLASS_PARAM_VALS/>
+  <RULE_HTTPCALLS/>
+  <RULE_HTTPCALL_PARAMS/>
+  <BPD_ITEMS>
+   <T_BPD_ITEM>
+    <ITEM_ID>1000913883996</ITEM_ID>
+    <PKEY>10009671326</PKEY>
+    <ITEM_TYPE_ID>9</ITEM_TYPE_ID>
+    <ITEM_STATUS_ID>1</ITEM_STATUS_ID>
+    <DESCRIPTION>&lt;p&gt;After user is updated, sets&amp;nbsp;UMGMT_US_USER_CLASS based on security role.&lt;/p&gt;
+</DESCRIPTION>
+    <BLOB_DATA/>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <NAME>UMGMT Update US_USER_CLASS uu</NAME>
+    <APP_LABEL/>
+   </T_BPD_ITEM>
+  </BPD_ITEMS>
+  <RULE_GEOCODING/>
+  <RULE_MAP_SNIPPETS/>
+  <PROGRAM_ID>1000979402</PROGRAM_ID>
+  <RULE_TYPE_ID>25</RULE_TYPE_ID>
+  <RULE_TOWER_GROUPS/>
+  <COMPONENT_PACKAGES>
+   <T_BPL_COMP_PKG>
+    <COMPONENT_ID>4</COMPONENT_ID>
+    <OBJECT_ID>10009671326</OBJECT_ID>
+    <COMPONENTS_PACKAGE_ID>189555</COMPONENTS_PACKAGE_ID>
+    <NAME>VP - User Management</NAME>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <BPD_ITEMS/>
+    <IS_LOCKED>0</IS_LOCKED>
+   </T_BPL_COMP_PKG>
+  </COMPONENT_PACKAGES>
+  <CONFIG_FIELD_IDNUMS/>
+  <TASK_DATE_IDNUMS/>
+  <TASK_IDNUMS/>
+  <TRACKOR_TYPE_IDNUMS/>
+  <RELATION_TYPE_IDNUMS/>
+  <WP_TEMPLATE_IDNUMS/>
+  <WF_TEMPLATE_IDNUMS/>
+  <IMPORT_IDNUMS/>
+  <REPORT_IDNUMS/>
+  <COMPONENT_LABELS/>
+ </RULES_ITEM>
+ <RULES_ITEM>
+  <IS_ASYNC>0</IS_ASYNC>
+  <IS_ENABLED>1</IS_ENABLED>
+  <RULE>UMGMT Update User Flags fb</RULE>
+  <RULE_CLASS_ID>1</RULE_CLASS_ID>
+  <RULE_ID>10009671327</RULE_ID>
+  <RULE_PARAM>
+   <RULE_PARAM_ID>3</RULE_PARAM_ID>
+   <RULE_PARAM>XITOR_ID</RULE_PARAM>
+  </RULE_PARAM>
+  <RULE_TYPE>
+   <RULE_TYPE_ID>4</RULE_TYPE_ID>
+   <RULE_TYPE>Form Buttons</RULE_TYPE>
+   <ID_FIELD>PK</ID_FIELD>
+   <TEMPLATE_SQL>select xitor_type_id as &quot;Trackor Type ID&quot;,
+       xitor_type as &quot;Trackor Type&quot;,
+       xitor_type_id as &quot;Trackor Type Id&quot;
+from xitor_type
+where is_static_definition &lt;&gt; 1</TEMPLATE_SQL>
+   <TYPE_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6414</APP_LABEL_ID>
+     <LABEL_TEXT>Form Buttons</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6414</APP_LABEL_ID>
+     <LABEL_TEXT>Form Buttons</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6414</APP_LABEL_ID>
+     <LABEL_TEXT>Form Buttons</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6414</APP_LABEL_ID>
+     <LABEL_TEXT>Form Buttons</LABEL_TEXT>
+    </T_LABEL>
+   </TYPE_LABELS>
+   <DESC_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6443</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when selected from the Trackor Browser or Task View pages. This is used to select a rule that can be written to perform any special function (e.g., delete Trackors, lock or unlock fields, mass assign values, etc.).</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6443</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when selected from the Trackor Browser or Task View pages. This is used to select a rule that can be written to perform any special function (e.g., delete Trackors, lock or unlock fields, mass assign values, etc.).</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6443</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when selected from the Trackor Browser or Task View pages. This is used to select a rule that can be written to perform any special function (e.g., delete Trackors, lock or unlock fields, mass assign values, etc.).</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6443</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when selected from the Trackor Browser or Task View pages. This is used to select a rule that can be written to perform any special function (e.g., delete Trackors, lock or unlock fields, mass assign values, etc.).</LABEL_TEXT>
+    </T_LABEL>
+   </DESC_LABELS>
+  </RULE_TYPE>
+  <SQL_TEXT>begin
+    user_management.user_flags(:pk);
+end;</SQL_TEXT>
+  <WARNING_LABEL/>
+  <RULE_CLASS_PARAM_VALS/>
+  <RULE_HTTPCALLS/>
+  <RULE_HTTPCALL_PARAMS/>
+  <BPD_ITEMS>
+   <T_BPD_ITEM>
+    <ITEM_ID>1000913883997</ITEM_ID>
+    <PKEY>10009671327</PKEY>
+    <ITEM_TYPE_ID>9</ITEM_TYPE_ID>
+    <ITEM_STATUS_ID>1</ITEM_STATUS_ID>
+    <DESCRIPTION>&lt;p&gt;Sets the flags for users based on their privileges&lt;/p&gt;
+</DESCRIPTION>
+    <BLOB_DATA/>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <NAME>UMGMT Update User Flags fb</NAME>
+    <APP_LABEL/>
+   </T_BPD_ITEM>
+  </BPD_ITEMS>
+  <RULE_GEOCODING/>
+  <RULE_MAP_SNIPPETS/>
+  <PROGRAM_ID>1000979402</PROGRAM_ID>
+  <RULE_TYPE_ID>4</RULE_TYPE_ID>
+  <RULE_TOWER_GROUPS/>
+  <COMPONENT_PACKAGES>
+   <T_BPL_COMP_PKG>
+    <COMPONENT_ID>4</COMPONENT_ID>
+    <OBJECT_ID>10009671327</OBJECT_ID>
+    <COMPONENTS_PACKAGE_ID>189555</COMPONENTS_PACKAGE_ID>
+    <NAME>VP - User Management</NAME>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <BPD_ITEMS/>
+    <IS_LOCKED>0</IS_LOCKED>
+   </T_BPL_COMP_PKG>
+  </COMPONENT_PACKAGES>
+  <CONFIG_FIELD_IDNUMS/>
+  <TASK_DATE_IDNUMS/>
+  <TASK_IDNUMS/>
+  <TRACKOR_TYPE_IDNUMS>
+   <VARCHAR2>UMGMT_Users</VARCHAR2>
+  </TRACKOR_TYPE_IDNUMS>
+  <RELATION_TYPE_IDNUMS/>
+  <WP_TEMPLATE_IDNUMS/>
+  <WF_TEMPLATE_IDNUMS/>
+  <IMPORT_IDNUMS/>
+  <REPORT_IDNUMS/>
+  <COMPONENT_LABELS/>
+ </RULES_ITEM>
+ <RULES_ITEM>
+  <IS_ASYNC>0</IS_ASYNC>
+  <IS_ENABLED>1</IS_ENABLED>
+  <ORDER_NUMBER>1</ORDER_NUMBER>
+  <RULE>UMGMT Populate Created/Disabled dates</RULE>
+  <RULE_CLASS_ID>1</RULE_CLASS_ID>
+  <RULE_ID>10009671328</RULE_ID>
+  <RULE_TYPE>
+   <RULE_TYPE_ID>25</RULE_TYPE_ID>
+   <RULE_TYPE>After User Update</RULE_TYPE>
+   <ID_FIELD>USER_ID</ID_FIELD>
+   <TYPE_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6426</APP_LABEL_ID>
+     <LABEL_TEXT>User Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6426</APP_LABEL_ID>
+     <LABEL_TEXT>User Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6426</APP_LABEL_ID>
+     <LABEL_TEXT>User Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6426</APP_LABEL_ID>
+     <LABEL_TEXT>User Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+   </TYPE_LABELS>
+   <DESC_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6455</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a user is updated.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6455</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a user is updated.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6455</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a user is updated.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6455</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a user is updated.</LABEL_TEXT>
+    </T_LABEL>
+   </DESC_LABELS>
+  </RULE_TYPE>
+  <SQL_TEXT>begin
+    user_management.set_disabled_enabled_created_date(:user_id);
+end;</SQL_TEXT>
+  <WARNING_LABEL/>
+  <RULE_CLASS_PARAM_VALS/>
+  <RULE_HTTPCALLS/>
+  <RULE_HTTPCALL_PARAMS/>
+  <BPD_ITEMS>
+   <T_BPD_ITEM>
+    <ITEM_ID>1000913883998</ITEM_ID>
+    <PKEY>10009671328</PKEY>
+    <ITEM_TYPE_ID>9</ITEM_TYPE_ID>
+    <ITEM_STATUS_ID>1</ITEM_STATUS_ID>
+    <DESCRIPTION>&lt;p&gt;Updates user Created/Disabled dates after user is updated.&lt;/p&gt;
+</DESCRIPTION>
+    <BLOB_DATA/>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <NAME>UMGMT Populate Created/Disabled dates</NAME>
+    <APP_LABEL/>
+   </T_BPD_ITEM>
+  </BPD_ITEMS>
+  <RULE_GEOCODING/>
+  <RULE_MAP_SNIPPETS/>
+  <PROGRAM_ID>1000979402</PROGRAM_ID>
+  <RULE_TYPE_ID>25</RULE_TYPE_ID>
+  <RULE_TOWER_GROUPS/>
+  <COMPONENT_PACKAGES>
+   <T_BPL_COMP_PKG>
+    <COMPONENT_ID>4</COMPONENT_ID>
+    <OBJECT_ID>10009671328</OBJECT_ID>
+    <COMPONENTS_PACKAGE_ID>189555</COMPONENTS_PACKAGE_ID>
+    <NAME>VP - User Management</NAME>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <BPD_ITEMS/>
+    <IS_LOCKED>0</IS_LOCKED>
+   </T_BPL_COMP_PKG>
+  </COMPONENT_PACKAGES>
+  <CONFIG_FIELD_IDNUMS/>
+  <TASK_DATE_IDNUMS/>
+  <TASK_IDNUMS/>
+  <TRACKOR_TYPE_IDNUMS/>
+  <RELATION_TYPE_IDNUMS/>
+  <WP_TEMPLATE_IDNUMS/>
+  <WF_TEMPLATE_IDNUMS/>
+  <IMPORT_IDNUMS/>
+  <REPORT_IDNUMS/>
+  <COMPONENT_LABELS/>
+ </RULES_ITEM>
+ <RULES_ITEM>
+  <IS_ASYNC>0</IS_ASYNC>
+  <IS_ENABLED>1</IS_ENABLED>
+  <RULE>UMGMT Welcome Back on Account Reactivation</RULE>
+  <RULE_CLASS_ID>1</RULE_CLASS_ID>
+  <RULE_ID>10009671329</RULE_ID>
+  <RULE_TYPE>
+   <RULE_TYPE_ID>25</RULE_TYPE_ID>
+   <RULE_TYPE>After User Update</RULE_TYPE>
+   <ID_FIELD>USER_ID</ID_FIELD>
+   <TYPE_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6426</APP_LABEL_ID>
+     <LABEL_TEXT>User Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6426</APP_LABEL_ID>
+     <LABEL_TEXT>User Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6426</APP_LABEL_ID>
+     <LABEL_TEXT>User Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6426</APP_LABEL_ID>
+     <LABEL_TEXT>User Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+   </TYPE_LABELS>
+   <DESC_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6455</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a user is updated.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6455</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a user is updated.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6455</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a user is updated.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6455</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a user is updated.</LABEL_TEXT>
+    </T_LABEL>
+   </DESC_LABELS>
+  </RULE_TYPE>
+  <SQL_TEXT>begin
+    user_management.welcome_account_reactivation(:user_id);
+end;</SQL_TEXT>
+  <WARNING_LABEL/>
+  <RULE_CLASS_PARAM_VALS/>
+  <RULE_HTTPCALLS/>
+  <RULE_HTTPCALL_PARAMS/>
+  <BPD_ITEMS>
+   <T_BPD_ITEM>
+    <ITEM_ID>1000913883999</ITEM_ID>
+    <PKEY>10009671329</PKEY>
+    <ITEM_TYPE_ID>9</ITEM_TYPE_ID>
+    <ITEM_STATUS_ID>1</ITEM_STATUS_ID>
+    <DESCRIPTION>&lt;p&gt;Sends Welcome Back Email to user upon user reactivation.&lt;/p&gt;
+</DESCRIPTION>
+    <BLOB_DATA/>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <NAME>UMGMT Welcome Back on Account Reactivation</NAME>
+    <APP_LABEL/>
+   </T_BPD_ITEM>
+  </BPD_ITEMS>
+  <RULE_GEOCODING/>
+  <RULE_MAP_SNIPPETS/>
+  <PROGRAM_ID>1000979402</PROGRAM_ID>
+  <RULE_TYPE_ID>25</RULE_TYPE_ID>
+  <RULE_TOWER_GROUPS/>
+  <COMPONENT_PACKAGES>
+   <T_BPL_COMP_PKG>
+    <COMPONENT_ID>4</COMPONENT_ID>
+    <OBJECT_ID>10009671329</OBJECT_ID>
+    <COMPONENTS_PACKAGE_ID>189555</COMPONENTS_PACKAGE_ID>
+    <NAME>VP - User Management</NAME>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <BPD_ITEMS/>
+    <IS_LOCKED>0</IS_LOCKED>
+   </T_BPL_COMP_PKG>
+  </COMPONENT_PACKAGES>
+  <CONFIG_FIELD_IDNUMS/>
+  <TASK_DATE_IDNUMS/>
+  <TASK_IDNUMS/>
+  <TRACKOR_TYPE_IDNUMS/>
+  <RELATION_TYPE_IDNUMS/>
+  <WP_TEMPLATE_IDNUMS/>
+  <WF_TEMPLATE_IDNUMS/>
+  <IMPORT_IDNUMS/>
+  <REPORT_IDNUMS/>
+  <COMPONENT_LABELS/>
+ </RULES_ITEM>
+ <RULES_ITEM>
+  <IS_ASYNC>0</IS_ASYNC>
+  <IS_ENABLED>1</IS_ENABLED>
+  <RULE>UMGMT Populate Created/Disabled dates fb</RULE>
+  <RULE_CLASS_ID>1</RULE_CLASS_ID>
+  <RULE_ID>10009671330</RULE_ID>
+  <RULE_PARAM>
+   <RULE_PARAM_ID>3</RULE_PARAM_ID>
+   <RULE_PARAM>XITOR_ID</RULE_PARAM>
+  </RULE_PARAM>
+  <RULE_TYPE>
+   <RULE_TYPE_ID>4</RULE_TYPE_ID>
+   <RULE_TYPE>Form Buttons</RULE_TYPE>
+   <ID_FIELD>PK</ID_FIELD>
+   <TEMPLATE_SQL>select xitor_type_id as &quot;Trackor Type ID&quot;,
+       xitor_type as &quot;Trackor Type&quot;,
+       xitor_type_id as &quot;Trackor Type Id&quot;
+from xitor_type
+where is_static_definition &lt;&gt; 1</TEMPLATE_SQL>
+   <TYPE_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6414</APP_LABEL_ID>
+     <LABEL_TEXT>Form Buttons</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6414</APP_LABEL_ID>
+     <LABEL_TEXT>Form Buttons</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6414</APP_LABEL_ID>
+     <LABEL_TEXT>Form Buttons</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6414</APP_LABEL_ID>
+     <LABEL_TEXT>Form Buttons</LABEL_TEXT>
+    </T_LABEL>
+   </TYPE_LABELS>
+   <DESC_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6443</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when selected from the Trackor Browser or Task View pages. This is used to select a rule that can be written to perform any special function (e.g., delete Trackors, lock or unlock fields, mass assign values, etc.).</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6443</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when selected from the Trackor Browser or Task View pages. This is used to select a rule that can be written to perform any special function (e.g., delete Trackors, lock or unlock fields, mass assign values, etc.).</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6443</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when selected from the Trackor Browser or Task View pages. This is used to select a rule that can be written to perform any special function (e.g., delete Trackors, lock or unlock fields, mass assign values, etc.).</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6443</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when selected from the Trackor Browser or Task View pages. This is used to select a rule that can be written to perform any special function (e.g., delete Trackors, lock or unlock fields, mass assign values, etc.).</LABEL_TEXT>
+    </T_LABEL>
+   </DESC_LABELS>
+  </RULE_TYPE>
+  <SQL_TEXT>declare
+    v_user_id users.user_id%type;
+begin
+    select user_id
+      into v_user_id
+      from users
+     where xitor_id = :pk;
+    user_management.set_disabled_enabled_created_date(v_user_id);
+end;</SQL_TEXT>
+  <WARNING_LABEL/>
+  <RULE_CLASS_PARAM_VALS/>
+  <RULE_HTTPCALLS/>
+  <RULE_HTTPCALL_PARAMS/>
+  <BPD_ITEMS>
+   <T_BPD_ITEM>
+    <ITEM_ID>1000913884000</ITEM_ID>
+    <PKEY>10009671330</PKEY>
+    <ITEM_TYPE_ID>9</ITEM_TYPE_ID>
+    <ITEM_STATUS_ID>1</ITEM_STATUS_ID>
+    <DESCRIPTION>&lt;p&gt;Form button to update Created/Disabled dates for users.&lt;/p&gt;
+</DESCRIPTION>
+    <BLOB_DATA/>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <NAME>UMGMT Populate Created/Disabled dates fb</NAME>
+    <APP_LABEL/>
+   </T_BPD_ITEM>
+  </BPD_ITEMS>
+  <RULE_GEOCODING/>
+  <RULE_MAP_SNIPPETS/>
+  <PROGRAM_ID>1000979402</PROGRAM_ID>
+  <RULE_TYPE_ID>4</RULE_TYPE_ID>
+  <RULE_TOWER_GROUPS/>
+  <COMPONENT_PACKAGES>
+   <T_BPL_COMP_PKG>
+    <COMPONENT_ID>4</COMPONENT_ID>
+    <OBJECT_ID>10009671330</OBJECT_ID>
+    <COMPONENTS_PACKAGE_ID>189555</COMPONENTS_PACKAGE_ID>
+    <NAME>VP - User Management</NAME>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <BPD_ITEMS/>
+    <IS_LOCKED>0</IS_LOCKED>
+   </T_BPL_COMP_PKG>
+  </COMPONENT_PACKAGES>
+  <CONFIG_FIELD_IDNUMS/>
+  <TASK_DATE_IDNUMS/>
+  <TASK_IDNUMS/>
+  <TRACKOR_TYPE_IDNUMS>
+   <VARCHAR2>UMGMT_Users</VARCHAR2>
+  </TRACKOR_TYPE_IDNUMS>
+  <RELATION_TYPE_IDNUMS/>
+  <WP_TEMPLATE_IDNUMS/>
+  <WF_TEMPLATE_IDNUMS/>
+  <IMPORT_IDNUMS/>
+  <REPORT_IDNUMS/>
+  <COMPONENT_LABELS/>
+ </RULES_ITEM>
+ <RULES_ITEM>
+  <IS_ASYNC>0</IS_ASYNC>
+  <IS_ENABLED>1</IS_ENABLED>
+  <RULE>UMGMT Set User Trackor Key on New User Trackor</RULE>
+  <RULE_CLASS_ID>1</RULE_CLASS_ID>
+  <RULE_ID>10009671331</RULE_ID>
+  <RULE_TYPE>
+   <RULE_TYPE_ID>18</RULE_TYPE_ID>
+   <RULE_TYPE>After Trackor Create</RULE_TYPE>
+   <ID_FIELD>XITOR_ID</ID_FIELD>
+   <TEMPLATE_SQL>select xitor_type_id as &quot;Xitor Type ID&quot;,
+       xitor_type as &quot;Xitor Type&quot;,
+       xitor_type_id as &quot;Xitor Type Id&quot;
+from xitor_type</TEMPLATE_SQL>
+   <TYPE_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6420</APP_LABEL_ID>
+     <LABEL_TEXT>Trackor Created (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6420</APP_LABEL_ID>
+     <LABEL_TEXT>Trackor Created (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6420</APP_LABEL_ID>
+     <LABEL_TEXT>Trackor Created (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6420</APP_LABEL_ID>
+     <LABEL_TEXT>Trackor Created (After)</LABEL_TEXT>
+    </T_LABEL>
+   </TYPE_LABELS>
+   <DESC_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6449</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a new Trackor is created.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6449</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a new Trackor is created.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6449</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a new Trackor is created.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6449</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a new Trackor is created.</LABEL_TEXT>
+    </T_LABEL>
+   </DESC_LABELS>
+  </RULE_TYPE>
+  <SQL_TEXT>begin
+    user_management.set_user_trackor_on_new_trackor(:xitor_id);
+end;</SQL_TEXT>
+  <WARNING_LABEL/>
+  <RULE_CLASS_PARAM_VALS/>
+  <RULE_HTTPCALLS/>
+  <RULE_HTTPCALL_PARAMS/>
+  <BPD_ITEMS>
+   <T_BPD_ITEM>
+    <ITEM_ID>1000913884001</ITEM_ID>
+    <PKEY>10009671331</PKEY>
+    <ITEM_TYPE_ID>9</ITEM_TYPE_ID>
+    <ITEM_STATUS_ID>1</ITEM_STATUS_ID>
+    <DESCRIPTION>&lt;p&gt;Sets the Users XITOR_KEY upon new User Trackor creation.&lt;/p&gt;
+</DESCRIPTION>
+    <BLOB_DATA/>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <NAME>UMGMT Set User Trackor Key on New User Trackor</NAME>
+    <APP_LABEL/>
+   </T_BPD_ITEM>
+  </BPD_ITEMS>
+  <RULE_GEOCODING/>
+  <RULE_MAP_SNIPPETS/>
+  <PROGRAM_ID>1000979402</PROGRAM_ID>
+  <RULE_TYPE_ID>18</RULE_TYPE_ID>
+  <RULE_TOWER_GROUPS/>
+  <COMPONENT_PACKAGES>
+   <T_BPL_COMP_PKG>
+    <COMPONENT_ID>4</COMPONENT_ID>
+    <OBJECT_ID>10009671331</OBJECT_ID>
+    <COMPONENTS_PACKAGE_ID>189555</COMPONENTS_PACKAGE_ID>
+    <NAME>VP - User Management</NAME>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <BPD_ITEMS/>
+    <IS_LOCKED>0</IS_LOCKED>
+   </T_BPL_COMP_PKG>
+  </COMPONENT_PACKAGES>
+  <CONFIG_FIELD_IDNUMS/>
+  <TASK_DATE_IDNUMS/>
+  <TASK_IDNUMS/>
+  <TRACKOR_TYPE_IDNUMS>
+   <VARCHAR2>UMGMT_Users</VARCHAR2>
+  </TRACKOR_TYPE_IDNUMS>
+  <RELATION_TYPE_IDNUMS/>
+  <WP_TEMPLATE_IDNUMS/>
+  <WF_TEMPLATE_IDNUMS/>
+  <IMPORT_IDNUMS/>
+  <REPORT_IDNUMS/>
+  <COMPONENT_LABELS/>
+ </RULES_ITEM>
+ <RULES_ITEM>
+  <IS_ASYNC>0</IS_ASYNC>
+  <IS_ENABLED>1</IS_ENABLED>
+  <RULE>UMGMT Welcome on Account Creation</RULE>
+  <RULE_CLASS_ID>1</RULE_CLASS_ID>
+  <RULE_ID>10009671334</RULE_ID>
+  <RULE_TYPE>
+   <RULE_TYPE_ID>24</RULE_TYPE_ID>
+   <RULE_TYPE>After User Create</RULE_TYPE>
+   <ID_FIELD>USER_ID</ID_FIELD>
+   <TYPE_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6425</APP_LABEL_ID>
+     <LABEL_TEXT>User Created (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6425</APP_LABEL_ID>
+     <LABEL_TEXT>User Created (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6425</APP_LABEL_ID>
+     <LABEL_TEXT>User Created (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6425</APP_LABEL_ID>
+     <LABEL_TEXT>User Created (After)</LABEL_TEXT>
+    </T_LABEL>
+   </TYPE_LABELS>
+   <DESC_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6454</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when new user is created.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6454</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when new user is created.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6454</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when new user is created.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6454</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when new user is created.</LABEL_TEXT>
+    </T_LABEL>
+   </DESC_LABELS>
+  </RULE_TYPE>
+  <SQL_TEXT>begin
+    user_management.welcome_account_creation(:user_id);
+end;</SQL_TEXT>
+  <WARNING_LABEL/>
+  <RULE_CLASS_PARAM_VALS/>
+  <RULE_HTTPCALLS/>
+  <RULE_HTTPCALL_PARAMS/>
+  <BPD_ITEMS>
+   <T_BPD_ITEM>
+    <ITEM_ID>1000913884004</ITEM_ID>
+    <PKEY>10009671334</PKEY>
+    <ITEM_TYPE_ID>9</ITEM_TYPE_ID>
+    <ITEM_STATUS_ID>1</ITEM_STATUS_ID>
+    <DESCRIPTION>&lt;p&gt;Sends Welcome Email to new user upon user creation.&lt;/p&gt;
+</DESCRIPTION>
+    <BLOB_DATA/>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <NAME>UMGMT Welcome on Account Creation</NAME>
+    <APP_LABEL/>
+   </T_BPD_ITEM>
+  </BPD_ITEMS>
+  <RULE_GEOCODING/>
+  <RULE_MAP_SNIPPETS/>
+  <PROGRAM_ID>1000979402</PROGRAM_ID>
+  <RULE_TYPE_ID>24</RULE_TYPE_ID>
+  <RULE_TOWER_GROUPS/>
+  <COMPONENT_PACKAGES>
+   <T_BPL_COMP_PKG>
+    <COMPONENT_ID>4</COMPONENT_ID>
+    <OBJECT_ID>10009671334</OBJECT_ID>
+    <COMPONENTS_PACKAGE_ID>189555</COMPONENTS_PACKAGE_ID>
+    <NAME>VP - User Management</NAME>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <BPD_ITEMS/>
+    <IS_LOCKED>0</IS_LOCKED>
+   </T_BPL_COMP_PKG>
+  </COMPONENT_PACKAGES>
+  <CONFIG_FIELD_IDNUMS/>
+  <TASK_DATE_IDNUMS/>
+  <TASK_IDNUMS/>
+  <TRACKOR_TYPE_IDNUMS/>
+  <RELATION_TYPE_IDNUMS/>
+  <WP_TEMPLATE_IDNUMS/>
+  <WF_TEMPLATE_IDNUMS/>
+  <IMPORT_IDNUMS/>
+  <REPORT_IDNUMS/>
+  <COMPONENT_LABELS/>
+ </RULES_ITEM>
+ <RULES_ITEM>
+  <IS_ASYNC>0</IS_ASYNC>
+  <IS_ENABLED>1</IS_ENABLED>
+  <RULE>UMGMT Update UMGMT_US_USER_CLASS fb</RULE>
+  <RULE_CLASS_ID>1</RULE_CLASS_ID>
+  <RULE_ID>10009671336</RULE_ID>
+  <RULE_PARAM>
+   <RULE_PARAM_ID>3</RULE_PARAM_ID>
+   <RULE_PARAM>XITOR_ID</RULE_PARAM>
+  </RULE_PARAM>
+  <RULE_TYPE>
+   <RULE_TYPE_ID>4</RULE_TYPE_ID>
+   <RULE_TYPE>Form Buttons</RULE_TYPE>
+   <ID_FIELD>PK</ID_FIELD>
+   <TEMPLATE_SQL>select xitor_type_id as &quot;Trackor Type ID&quot;,
+       xitor_type as &quot;Trackor Type&quot;,
+       xitor_type_id as &quot;Trackor Type Id&quot;
+from xitor_type
+where is_static_definition &lt;&gt; 1</TEMPLATE_SQL>
+   <TYPE_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6414</APP_LABEL_ID>
+     <LABEL_TEXT>Form Buttons</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6414</APP_LABEL_ID>
+     <LABEL_TEXT>Form Buttons</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6414</APP_LABEL_ID>
+     <LABEL_TEXT>Form Buttons</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6414</APP_LABEL_ID>
+     <LABEL_TEXT>Form Buttons</LABEL_TEXT>
+    </T_LABEL>
+   </TYPE_LABELS>
+   <DESC_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6443</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when selected from the Trackor Browser or Task View pages. This is used to select a rule that can be written to perform any special function (e.g., delete Trackors, lock or unlock fields, mass assign values, etc.).</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6443</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when selected from the Trackor Browser or Task View pages. This is used to select a rule that can be written to perform any special function (e.g., delete Trackors, lock or unlock fields, mass assign values, etc.).</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6443</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when selected from the Trackor Browser or Task View pages. This is used to select a rule that can be written to perform any special function (e.g., delete Trackors, lock or unlock fields, mass assign values, etc.).</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6443</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when selected from the Trackor Browser or Task View pages. This is used to select a rule that can be written to perform any special function (e.g., delete Trackors, lock or unlock fields, mass assign values, etc.).</LABEL_TEXT>
+    </T_LABEL>
+   </DESC_LABELS>
+  </RULE_TYPE>
+  <SQL_TEXT>begin       
+    user_management.set_user_class(:pk);
+end;</SQL_TEXT>
+  <WARNING_LABEL/>
+  <RULE_CLASS_PARAM_VALS/>
+  <RULE_HTTPCALLS/>
+  <RULE_HTTPCALL_PARAMS/>
+  <BPD_ITEMS>
+   <T_BPD_ITEM>
+    <ITEM_ID>1000913884006</ITEM_ID>
+    <PKEY>10009671336</PKEY>
+    <ITEM_TYPE_ID>9</ITEM_TYPE_ID>
+    <ITEM_STATUS_ID>1</ITEM_STATUS_ID>
+    <DESCRIPTION>&lt;p&gt;Sets&amp;nbsp;UMGMT_US_USER_CLASS&amp;nbsp;based on security role. Triggers from form button.&lt;/p&gt;
+</DESCRIPTION>
+    <BLOB_DATA/>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <NAME>UMGMT Update UMGMT_US_USER_CLASS fb</NAME>
+    <APP_LABEL/>
+   </T_BPD_ITEM>
+  </BPD_ITEMS>
+  <RULE_GEOCODING/>
+  <RULE_MAP_SNIPPETS/>
+  <PROGRAM_ID>1000979402</PROGRAM_ID>
+  <RULE_TYPE_ID>4</RULE_TYPE_ID>
+  <RULE_TOWER_GROUPS/>
+  <COMPONENT_PACKAGES>
+   <T_BPL_COMP_PKG>
+    <COMPONENT_ID>4</COMPONENT_ID>
+    <OBJECT_ID>10009671336</OBJECT_ID>
+    <COMPONENTS_PACKAGE_ID>189555</COMPONENTS_PACKAGE_ID>
+    <NAME>VP - User Management</NAME>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <BPD_ITEMS/>
+    <IS_LOCKED>0</IS_LOCKED>
+   </T_BPL_COMP_PKG>
+  </COMPONENT_PACKAGES>
+  <CONFIG_FIELD_IDNUMS/>
+  <TASK_DATE_IDNUMS/>
+  <TASK_IDNUMS/>
+  <TRACKOR_TYPE_IDNUMS>
+   <VARCHAR2>UMGMT_Users</VARCHAR2>
+  </TRACKOR_TYPE_IDNUMS>
+  <RELATION_TYPE_IDNUMS/>
+  <WP_TEMPLATE_IDNUMS/>
+  <WF_TEMPLATE_IDNUMS/>
+  <IMPORT_IDNUMS/>
+  <REPORT_IDNUMS/>
+  <COMPONENT_LABELS/>
+ </RULES_ITEM>
+ <RULES_ITEM>
+  <IS_ASYNC>0</IS_ASYNC>
+  <IS_ENABLED>1</IS_ENABLED>
+  <RULE>UMGMT Set User Trackor Key on New User</RULE>
+  <RULE_CLASS_ID>1</RULE_CLASS_ID>
+  <RULE_ID>10009671338</RULE_ID>
+  <RULE_TYPE>
+   <RULE_TYPE_ID>24</RULE_TYPE_ID>
+   <RULE_TYPE>After User Create</RULE_TYPE>
+   <ID_FIELD>USER_ID</ID_FIELD>
+   <TYPE_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6425</APP_LABEL_ID>
+     <LABEL_TEXT>User Created (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6425</APP_LABEL_ID>
+     <LABEL_TEXT>User Created (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6425</APP_LABEL_ID>
+     <LABEL_TEXT>User Created (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6425</APP_LABEL_ID>
+     <LABEL_TEXT>User Created (After)</LABEL_TEXT>
+    </T_LABEL>
+   </TYPE_LABELS>
+   <DESC_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6454</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when new user is created.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6454</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when new user is created.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6454</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when new user is created.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6454</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when new user is created.</LABEL_TEXT>
+    </T_LABEL>
+   </DESC_LABELS>
+  </RULE_TYPE>
+  <SQL_TEXT>begin
+    user_management.set_user_trackor_on_new_user(:user_id);
+end;</SQL_TEXT>
+  <WARNING_LABEL/>
+  <RULE_CLASS_PARAM_VALS/>
+  <RULE_HTTPCALLS/>
+  <RULE_HTTPCALL_PARAMS/>
+  <BPD_ITEMS>
+   <T_BPD_ITEM>
+    <ITEM_ID>1000913884009</ITEM_ID>
+    <PKEY>10009671338</PKEY>
+    <ITEM_TYPE_ID>9</ITEM_TYPE_ID>
+    <ITEM_STATUS_ID>1</ITEM_STATUS_ID>
+    <DESCRIPTION>&lt;p&gt;Sets the Users XITOR_KEY upon new User creation.&lt;/p&gt;
+</DESCRIPTION>
+    <BLOB_DATA/>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <NAME>UMGMT Set User Trackor Key on New User</NAME>
+    <APP_LABEL/>
+   </T_BPD_ITEM>
+  </BPD_ITEMS>
+  <RULE_GEOCODING/>
+  <RULE_MAP_SNIPPETS/>
+  <PROGRAM_ID>1000979402</PROGRAM_ID>
+  <RULE_TYPE_ID>24</RULE_TYPE_ID>
+  <RULE_TOWER_GROUPS/>
+  <COMPONENT_PACKAGES>
+   <T_BPL_COMP_PKG>
+    <COMPONENT_ID>4</COMPONENT_ID>
+    <OBJECT_ID>10009671338</OBJECT_ID>
+    <COMPONENTS_PACKAGE_ID>189555</COMPONENTS_PACKAGE_ID>
+    <NAME>VP - User Management</NAME>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <BPD_ITEMS/>
+    <IS_LOCKED>0</IS_LOCKED>
+   </T_BPL_COMP_PKG>
+  </COMPONENT_PACKAGES>
+  <CONFIG_FIELD_IDNUMS/>
+  <TASK_DATE_IDNUMS/>
+  <TASK_IDNUMS/>
+  <TRACKOR_TYPE_IDNUMS/>
+  <RELATION_TYPE_IDNUMS/>
+  <WP_TEMPLATE_IDNUMS/>
+  <WF_TEMPLATE_IDNUMS/>
+  <IMPORT_IDNUMS/>
+  <REPORT_IDNUMS/>
+  <COMPONENT_LABELS/>
+ </RULES_ITEM>
+ <RULES_ITEM>
+  <IS_ASYNC>0</IS_ASYNC>
+  <IS_ENABLED>1</IS_ENABLED>
+  <RULE>UMGMT Password Aging</RULE>
+  <RULE_CLASS_ID>1</RULE_CLASS_ID>
+  <RULE_ID>10009671339</RULE_ID>
+  <RULE_TYPE>
+   <RULE_TYPE_ID>1031823</RULE_TYPE_ID>
+   <RULE_TYPE>Execute Nightly</RULE_TYPE>
+   <REPEAT_INTERVAL>FREQ=DAILY;BYHOUR=4;</REPEAT_INTERVAL>
+   <START_DATE>02/18/2020 11:32:00</START_DATE>
+   <TYPE_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>-5384832</APP_LABEL_ID>
+     <LABEL_TEXT>Execute Nightly</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>-5384832</APP_LABEL_ID>
+     <LABEL_TEXT>Execute Nightly</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>-5384832</APP_LABEL_ID>
+     <LABEL_TEXT>Execute Nightly</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>-5384832</APP_LABEL_ID>
+     <LABEL_TEXT>야간 실행</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>20</APP_LANG_ID>
+     <APP_LABEL_ID>-5384832</APP_LABEL_ID>
+     <LABEL_TEXT>Exécuter la nuit</LABEL_TEXT>
+    </T_LABEL>
+   </TYPE_LABELS>
+   <DESC_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>-5384833</APP_LABEL_ID>
+     <LABEL_TEXT>Execute Nightly at Midnight</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>-5384833</APP_LABEL_ID>
+     <LABEL_TEXT>Execute Nightly at Midnight</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>-5384833</APP_LABEL_ID>
+     <LABEL_TEXT>Execute Nightly at Midnight</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>-5384833</APP_LABEL_ID>
+     <LABEL_TEXT>야간 자정 실행</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>20</APP_LANG_ID>
+     <APP_LABEL_ID>-5384833</APP_LABEL_ID>
+     <LABEL_TEXT>Exécuter la nuit à minuit</LABEL_TEXT>
+    </T_LABEL>
+   </DESC_LABELS>
+  </RULE_TYPE>
+  <SQL_TEXT>begin
+    user_management.password_aging();
+end;</SQL_TEXT>
+  <WARNING_LABEL/>
+  <RULE_CLASS_PARAM_VALS/>
+  <RULE_HTTPCALLS/>
+  <RULE_HTTPCALL_PARAMS/>
+  <BPD_ITEMS>
+   <T_BPD_ITEM>
+    <ITEM_ID>1000913884010</ITEM_ID>
+    <PKEY>10009671339</PKEY>
+    <ITEM_TYPE_ID>9</ITEM_TYPE_ID>
+    <ITEM_STATUS_ID>1</ITEM_STATUS_ID>
+    <DESCRIPTION>&lt;p&gt;This rule is used to check if a password is expired.&lt;/p&gt;
+</DESCRIPTION>
+    <BLOB_DATA/>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <NAME>UMGMT Password Aging</NAME>
+    <APP_LABEL/>
+   </T_BPD_ITEM>
+  </BPD_ITEMS>
+  <RULE_GEOCODING/>
+  <RULE_MAP_SNIPPETS/>
+  <PROGRAM_ID>1000979402</PROGRAM_ID>
+  <RULE_TYPE_ID>1031823</RULE_TYPE_ID>
+  <RULE_TOWER_GROUPS/>
+  <COMPONENT_PACKAGES>
+   <T_BPL_COMP_PKG>
+    <COMPONENT_ID>4</COMPONENT_ID>
+    <OBJECT_ID>10009671339</OBJECT_ID>
+    <COMPONENTS_PACKAGE_ID>189555</COMPONENTS_PACKAGE_ID>
+    <NAME>VP - User Management</NAME>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <BPD_ITEMS/>
+    <IS_LOCKED>0</IS_LOCKED>
+   </T_BPL_COMP_PKG>
+  </COMPONENT_PACKAGES>
+  <CONFIG_FIELD_IDNUMS/>
+  <TASK_DATE_IDNUMS/>
+  <TASK_IDNUMS/>
+  <TRACKOR_TYPE_IDNUMS/>
+  <RELATION_TYPE_IDNUMS/>
+  <WP_TEMPLATE_IDNUMS/>
+  <WF_TEMPLATE_IDNUMS/>
+  <IMPORT_IDNUMS/>
+  <REPORT_IDNUMS/>
+  <COMPONENT_LABELS/>
+ </RULES_ITEM>
+ <RULES_ITEM>
+  <IS_ASYNC>0</IS_ASYNC>
+  <IS_ENABLED>1</IS_ENABLED>
+  <RULE>UMGMT User Aging</RULE>
+  <RULE_CLASS_ID>1</RULE_CLASS_ID>
+  <RULE_ID>10009671340</RULE_ID>
+  <RULE_TYPE>
+   <RULE_TYPE_ID>1031823</RULE_TYPE_ID>
+   <RULE_TYPE>Execute Nightly</RULE_TYPE>
+   <REPEAT_INTERVAL>FREQ=DAILY;BYHOUR=4;</REPEAT_INTERVAL>
+   <START_DATE>02/18/2020 11:32:00</START_DATE>
+   <TYPE_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>-5384832</APP_LABEL_ID>
+     <LABEL_TEXT>Execute Nightly</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>-5384832</APP_LABEL_ID>
+     <LABEL_TEXT>Execute Nightly</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>-5384832</APP_LABEL_ID>
+     <LABEL_TEXT>Execute Nightly</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>-5384832</APP_LABEL_ID>
+     <LABEL_TEXT>야간 실행</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>20</APP_LANG_ID>
+     <APP_LABEL_ID>-5384832</APP_LABEL_ID>
+     <LABEL_TEXT>Exécuter la nuit</LABEL_TEXT>
+    </T_LABEL>
+   </TYPE_LABELS>
+   <DESC_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>-5384833</APP_LABEL_ID>
+     <LABEL_TEXT>Execute Nightly at Midnight</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>-5384833</APP_LABEL_ID>
+     <LABEL_TEXT>Execute Nightly at Midnight</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>-5384833</APP_LABEL_ID>
+     <LABEL_TEXT>Execute Nightly at Midnight</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>-5384833</APP_LABEL_ID>
+     <LABEL_TEXT>야간 자정 실행</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>20</APP_LANG_ID>
+     <APP_LABEL_ID>-5384833</APP_LABEL_ID>
+     <LABEL_TEXT>Exécuter la nuit à minuit</LABEL_TEXT>
+    </T_LABEL>
+   </DESC_LABELS>
+  </RULE_TYPE>
+  <SQL_TEXT>begin
+    user_management.user_aging();
+end;</SQL_TEXT>
+  <WARNING_LABEL/>
+  <RULE_CLASS_PARAM_VALS/>
+  <RULE_HTTPCALLS/>
+  <RULE_HTTPCALL_PARAMS/>
+  <BPD_ITEMS>
+   <T_BPD_ITEM>
+    <ITEM_ID>1000913884011</ITEM_ID>
+    <PKEY>10009671340</PKEY>
+    <ITEM_TYPE_ID>9</ITEM_TYPE_ID>
+    <ITEM_STATUS_ID>1</ITEM_STATUS_ID>
+    <DESCRIPTION>&lt;p&gt;Disables long time inactive Users&lt;/p&gt;
+</DESCRIPTION>
+    <BLOB_DATA/>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <NAME>UMGMT User Aging</NAME>
+    <APP_LABEL/>
+   </T_BPD_ITEM>
+  </BPD_ITEMS>
+  <RULE_GEOCODING/>
+  <RULE_MAP_SNIPPETS/>
+  <PROGRAM_ID>1000979402</PROGRAM_ID>
+  <RULE_TYPE_ID>1031823</RULE_TYPE_ID>
+  <RULE_TOWER_GROUPS/>
+  <COMPONENT_PACKAGES>
+   <T_BPL_COMP_PKG>
+    <COMPONENT_ID>4</COMPONENT_ID>
+    <OBJECT_ID>10009671340</OBJECT_ID>
+    <COMPONENTS_PACKAGE_ID>189555</COMPONENTS_PACKAGE_ID>
+    <NAME>VP - User Management</NAME>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <BPD_ITEMS/>
+    <IS_LOCKED>0</IS_LOCKED>
+   </T_BPL_COMP_PKG>
+  </COMPONENT_PACKAGES>
+  <CONFIG_FIELD_IDNUMS/>
+  <TASK_DATE_IDNUMS/>
+  <TASK_IDNUMS/>
+  <TRACKOR_TYPE_IDNUMS/>
+  <RELATION_TYPE_IDNUMS/>
+  <WP_TEMPLATE_IDNUMS/>
+  <WF_TEMPLATE_IDNUMS/>
+  <IMPORT_IDNUMS/>
+  <REPORT_IDNUMS/>
+  <COMPONENT_LABELS/>
+ </RULES_ITEM>
+ <RULES_ITEM>
+  <IS_ASYNC>0</IS_ASYNC>
+  <IS_ENABLED>1</IS_ENABLED>
+  <RULE>UMGMT Update User Flags uu</RULE>
+  <RULE_CLASS_ID>1</RULE_CLASS_ID>
+  <RULE_ID>10009671341</RULE_ID>
+  <RULE_TYPE>
+   <RULE_TYPE_ID>25</RULE_TYPE_ID>
+   <RULE_TYPE>After User Update</RULE_TYPE>
+   <ID_FIELD>USER_ID</ID_FIELD>
+   <TYPE_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6426</APP_LABEL_ID>
+     <LABEL_TEXT>User Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6426</APP_LABEL_ID>
+     <LABEL_TEXT>User Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6426</APP_LABEL_ID>
+     <LABEL_TEXT>User Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6426</APP_LABEL_ID>
+     <LABEL_TEXT>User Updated (After)</LABEL_TEXT>
+    </T_LABEL>
+   </TYPE_LABELS>
+   <DESC_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6455</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a user is updated.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6455</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a user is updated.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6455</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a user is updated.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>6455</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when a user is updated.</LABEL_TEXT>
+    </T_LABEL>
+   </DESC_LABELS>
+  </RULE_TYPE>
+  <SQL_TEXT>declare
+    v_user_xitor_id xitor.xitor_id%type;
+begin
+
+    select xitor_id 
+      into v_user_xitor_id 
+      from users 
+     where user_id = :user_id;
+     
+    if v_user_xitor_id is null then 
+        return; 
+    end if;
+    
+    user_management.user_flags(v_user_xitor_id);
+    
+end;</SQL_TEXT>
+  <WARNING_LABEL/>
+  <RULE_CLASS_PARAM_VALS/>
+  <RULE_HTTPCALLS/>
+  <RULE_HTTPCALL_PARAMS/>
+  <BPD_ITEMS>
+   <T_BPD_ITEM>
+    <ITEM_ID>1000913884012</ITEM_ID>
+    <PKEY>10009671341</PKEY>
+    <ITEM_TYPE_ID>9</ITEM_TYPE_ID>
+    <ITEM_STATUS_ID>1</ITEM_STATUS_ID>
+    <DESCRIPTION>&lt;p&gt;Sets the flags for users based on their privileges&lt;/p&gt;
+</DESCRIPTION>
+    <BLOB_DATA/>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <NAME>UMGMT Update User Flags uu</NAME>
+    <APP_LABEL/>
+   </T_BPD_ITEM>
+  </BPD_ITEMS>
+  <RULE_GEOCODING/>
+  <RULE_MAP_SNIPPETS/>
+  <PROGRAM_ID>1000979402</PROGRAM_ID>
+  <RULE_TYPE_ID>25</RULE_TYPE_ID>
+  <RULE_TOWER_GROUPS/>
+  <COMPONENT_PACKAGES>
+   <T_BPL_COMP_PKG>
+    <COMPONENT_ID>4</COMPONENT_ID>
+    <OBJECT_ID>10009671341</OBJECT_ID>
+    <COMPONENTS_PACKAGE_ID>189555</COMPONENTS_PACKAGE_ID>
+    <NAME>VP - User Management</NAME>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <BPD_ITEMS/>
+    <IS_LOCKED>0</IS_LOCKED>
+   </T_BPL_COMP_PKG>
+  </COMPONENT_PACKAGES>
+  <CONFIG_FIELD_IDNUMS/>
+  <TASK_DATE_IDNUMS/>
+  <TASK_IDNUMS/>
+  <TRACKOR_TYPE_IDNUMS/>
+  <RELATION_TYPE_IDNUMS/>
+  <WP_TEMPLATE_IDNUMS/>
+  <WF_TEMPLATE_IDNUMS/>
+  <IMPORT_IDNUMS/>
+  <REPORT_IDNUMS/>
+  <COMPONENT_LABELS/>
+ </RULES_ITEM>
+</RULES>
+</COMPONENTS>

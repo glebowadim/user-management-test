@@ -1,0 +1,1695 @@
+<?xml version="1.0" encoding="UTF-8"?><COMPONENTS author="user_managment_02_admin" description="" name="080.User-Management.xml" site="http&#x3a;&#x2f;&#x2f;dev2.vqs.net&#x3a;8080" ts="" ><DB_PACKAGES>
+ <DB_PACKAGES_ITEM>
+  <DB_PKG_NAME>USER_MANAGEMENT</DB_PKG_NAME>
+  <PKG_NAME>USER_MANAGEMENT</PKG_NAME>
+  <DB_PACKAGE_SPEC>CREATE OR REPLACE EDITIONABLE PACKAGE &quot;USER_MANAGEMENT&quot; as
+    
+    c_complexity_rules constant number := 4;
+    c_required_complexity_rules constant number := 3;
+    c_min_pwd_length constant number := 10;
+    c_max_pwd_length constant number := 128;
+    c_time_interval constant float := 5/24/60 /*5 minute interval*/;
+    c_invalid_attempts constant number := 4;
+    c_max_pwd_days constant number := 45;
+    c_monthly constant report_refresh_frequency.report_refresh_frequency_id%type := 8 /*monthly*/;
+    c_email_list constant varchar2(4000) := &apos;audit_group@onevizion.com, lpenn@onevizion.com&apos;;
+    c_default_app_name constant varchar2(4000) := &apos;OneVizion&apos;;
+    
+    c_exec_user_rt constant sec_role.role_type%type := &apos;UMGMT Exec User&apos;;
+    c_vendor_pool_rt constant sec_role.role_type%type := &apos;UMGMT Vendor Pool&apos;;
+    c_checklist_fieldvizion_rt constant sec_role.role_type%type := &apos;UMGMT Checklist-FieldVizion - MOBILE ONLY&apos;;
+    c_never_expire_rt constant sec_role.role_type%type := &apos;UMGMT Never Expire&apos;;
+    
+    c_max_create_user_days constant number := 30;
+    c_max_login_user_days constant number := 30;
+    c_reenable_days constant number := 7;
+    
+    procedure check_password_strength;
+    procedure lock_user(p_user_id in users.user_id%type);
+    procedure password_aging;
+    procedure report_usage_stat_send_email(p_process_id in process.process_id%type);
+    procedure reset_password_user_checkbox(p_xitor_id in xitor.xitor_id%type);
+    procedure set_user_trackor_on_new_user(p_user_id in users.user_id%type);
+    procedure set_user_trackor_on_new_trackor(p_xitor_id in xitor.xitor_id%type);
+    procedure set_user_class(p_xitor_id in xitor.xitor_id%type); 
+    procedure user_aging;
+    procedure user_flags(p_xitor_id in xitor.xitor_id%type);
+    procedure set_disabled_enabled_created_date(p_user_id in users.user_id%type);
+    procedure user_class(p_xitor_id in xitor.xitor_id%type);
+    procedure welcome_account_creation(p_user_id in users.user_id%type);
+    procedure welcome_account_reactivation(p_user_id in users.user_id%type);
+    
+end;</DB_PACKAGE_SPEC>
+  <DB_PACKAGE_BODY>CREATE OR REPLACE EDITIONABLE PACKAGE BODY &quot;USER_MANAGEMENT&quot; as
+
+    procedure check_password_strength as
+        v_password varchar2(4000);
+        v_msg varchar2(4000);
+        v_first_rule_msg varchar2(4000);
+        v_second_rule_msg varchar2(4000);
+        v_complexity_counter number;
+    begin
+    
+        v_password := pkg_vqsecurity.newpassword;
+        -- 1. Password Length
+        if length(v_password) &lt; c_min_pwd_length then
+            v_first_rule_msg := pkg_label.get_label_program(-5389945);
+        elsif length(v_password) &gt; c_max_pwd_length then
+            v_first_rule_msg := pkg_label.get_label_program(-5389950);
+        end if;
+    
+        -- 2. Password Complexity
+        -- Accourding to the OWASP, a password must meet at least 3 out of the following 4 complexity rules:
+        -- https://www.owasp.org/index.php/Authentication_Cheat_Sheet#Implement_Proper_Password_Strength_Controls
+        v_complexity_counter := c_complexity_rules;
+        if not regexp_like(v_password, &apos;[A-Z]&apos;) then
+            v_second_rule_msg := v_second_rule_msg || pkg_label.get_label_program(-5389951) || chr(13);
+            v_complexity_counter := v_complexity_counter - 1;
+        end if;
+
+        if not regexp_like(v_password, &apos;[a-z]&apos;) then
+            v_second_rule_msg := v_second_rule_msg || pkg_label.get_label_program(-5389948) || chr(13);
+            v_complexity_counter := v_complexity_counter - 1;
+        end if;
+
+        if not regexp_like(v_password, &apos;[0-9]&apos;) then
+            v_second_rule_msg := v_second_rule_msg || pkg_label.get_label_program(-5389949) || chr(13);
+            v_complexity_counter := v_complexity_counter - 1;
+        end if;
+
+        if not regexp_like(v_password, &apos;\W&apos;) then
+            v_second_rule_msg := v_second_rule_msg || pkg_label.get_label_program(-5389952) || chr(13);
+            v_complexity_counter := v_complexity_counter - 1;
+        end if;
+
+        -- The additional rule for checking if a password contains more than 2 indentical charaters in a row
+        if regexp_like(v_password, &apos;([a-z\d])\1{2,}&apos;) then
+            v_second_rule_msg := v_second_rule_msg || pkg_label.get_label_program(-5389953) || chr(13);
+        end if;
+
+        if v_first_rule_msg is not null then
+            v_msg := pkg_label.get_label_program(-5389954) || chr(13) || v_first_rule_msg;
+        end if;
+
+        if v_complexity_counter &lt; c_required_complexity_rules 
+        and v_second_rule_msg is not null 
+        then
+            v_msg := v_msg || chr(13) || chr(13) || pkg_label.get_label_program(-5389955) || chr(13) || v_second_rule_msg;
+        end if;
+
+        if v_msg is not null then
+            util.raiseerror(v_msg);
+        end if;
+        
+    end check_password_strength;
+    
+    procedure lock_user(p_user_id in users.user_id%type) as
+        c_logon_fail constant v_action.action_id%type :=  9 /*Logon Fail*/;
+    begin
+        for rec in (
+            select client_ip, 
+                   count(client_ip) attempts 
+              from usage_log ul, 
+                   users u
+             where action_id = c_logon_fail
+               and (upper(ul.un) = upper(u.un) or upper(ul.un) = upper(u.email))
+               and u.user_id = p_user_id
+               and iis_start between current_date - c_time_interval and current_date 
+             group by client_ip
+            having count(client_ip) &gt; c_invalid_attempts
+        ) loop
+            update users set lock_expires = current_date + c_time_interval where user_id = p_user_id;
+            exit;
+        end loop;
+    end lock_user;
+    
+    procedure password_aging as
+    begin
+        update users set must_change_password = 1 
+         where round(current_date - pwd_last_changed) &gt; c_max_pwd_days
+           and must_change_password = 0 
+           and is_disabled = 0 
+           and (lock_expires is null or lock_expires &lt; current_date)
+           and user_id not in (
+               select usr.user_id 
+                 from user_sec_role usr
+                 join sec_role ur on usr.sec_role_id = ur.sec_role_id
+                where ur.sec_role_id in (select sec_role_id 
+                                           from sec_role
+                                          where role_type = c_never_expire_rt)
+           );
+        return;
+    end password_aging;
+    
+    procedure report_usage_stat_send_email(p_process_id in process.process_id%type) as
+        v_send_report process.process_id%type;
+        v_domain param_system.value%type;
+        v_blob_data_id report_run.report_blob_data_id%type;
+        v_new_file_name varchar2(4000);
+    begin
+    
+        begin
+            select process_id
+              into v_send_report
+              from process
+             where process_id = p_process_id
+               and refresh_frequency_id = c_monthly;
+        exception when no_data_found then
+            return;
+        end;
+
+        select value into v_domain from param_system where name = &apos;DomainName&apos;;
+        v_new_file_name := pkg_label.get_label_program(-5389942) || v_domain || &apos; &apos; || to_char(add_months(current_date, -1), &apos;YYYY MON&apos;);
+        select report_blob_data_id into v_blob_data_id from report_run where process_id = p_process_id;
+        update blob_data set filename = v_new_file_name || &apos;.xlsx&apos; where blob_data_id = v_blob_data_id;
+
+        util.sendmailwithattachments(
+            v_new_file_name, 
+            v_new_file_name, 
+            &apos;&apos;, 
+            c_email_list, 
+            null, 
+            &apos;html&apos;, 
+            null, 
+            v_blob_data_id
+        );
+    
+    end report_usage_stat_send_email;
+    
+    procedure reset_password_user_checkbox(p_xitor_id in xitor.xitor_id%type) as
+        v_msg config_value_char.value_clob%type;
+        v_app_name param_system.value%type;
+        v_un users.un%type;
+        v_reply_email param_system.value%type;
+        v_email users.email%type;
+        v_first_name config_value_char.value_char%type;
+        v_title config_value_char.value_char%type;
+        v_user_id users.user_id%type;
+        v_user_xid users.xitor_id%type;
+        v_new_password varchar2(4000);
+        v_url param_system.value%type;
+    begin
+    
+        if util.getvalnumbyid(p_xitor_id, id.umgmt_users.cf.umgmt_us_reset_password) = 0 then 
+            return; 
+        end if;
+        util.setvalnumbyid(p_xitor_id, id.umgmt_users.cf.umgmt_us_reset_password, 0);
+
+    	v_msg := pkg_label.get_label_program(-5389943);
+        begin
+            select user_id, 
+                   xitor_id, 
+                   un, 
+                   email
+              into v_user_id, 
+                   v_user_xid, 
+                   v_un, 
+                   v_email
+              from users 
+             where xitor_id = p_xitor_id;
+        exception when no_data_found then
+            return;
+        end;
+        
+        if v_email is null then 
+            return;     
+        end if;
+                    
+        v_new_password := lower(dbms_random.string(&apos;x&apos;, 10));
+        update users 
+           set pwd = pkg_vqsecurity.encrypt(v_new_password), 
+               must_change_password = 1, 
+               pwd_last_changed = current_date 
+         where user_id = v_user_id;
+   
+        begin
+            select value 
+              into v_app_name 
+              from param_system 
+             where name = &apos;AppName&apos; 
+               and rownum = 1;
+        exception when no_data_found then
+            v_app_name := c_default_app_name;
+        end;
+        select value into v_reply_email from param_system where name = &apos;ReplyToAdminEmail&apos;;
+        select value into v_url from param_system where name = &apos;DomainName&apos;;
+
+        if v_user_xid is not null then 
+            v_first_name := util.getvalstrbyid(v_user_xid, id.umgmt_users.cf.umgmt_us_first_name); 
+        end if;
+        if v_first_name is null then 
+            v_first_name := v_un; 
+        end if;
+            
+        v_msg := replace(v_msg, &apos;[FirstName]&apos;, v_first_name);
+        v_msg := replace(v_msg, &apos;[PSUN]&apos;, v_un);
+        v_msg := replace(v_msg, &apos;[PSPWD]&apos;, v_new_password);
+        v_msg := replace(v_msg, &apos;[WEBSITE]&apos;, v_url);
+        v_title := pkg_label.get_label_program(-5389940) || v_app_name;   
+        util.sendmail(v_title, v_msg, v_reply_email, v_email, null, null, &apos;html&apos;);
+    
+    end reset_password_user_checkbox;
+    
+    procedure set_user_trackor_on_new_user(p_user_id in users.user_id%type) as
+        v_user_name users.un%type;
+        v_trackor_id users.xitor_id%type;
+    begin
+    
+        select un, 
+               xitor_id
+          into v_user_name, 
+               v_trackor_id
+          from users
+         where user_id = p_user_id;
+    
+        if v_trackor_id is not null then
+            util.setvalcharbyid(v_trackor_id, id.umgmt_users.cf.xitor_key, v_user_name);
+        end if;
+        
+    end set_user_trackor_on_new_user;
+    
+    procedure set_user_trackor_on_new_trackor(p_xitor_id in xitor.xitor_id%type) as
+        v_user_name users.un%type;
+    begin
+        
+        select un
+          into v_user_name
+          from users
+         where xitor_id = p_xitor_id
+           and rownum = 1;
+    
+        if v_user_name is not null then
+            util.setvalcharbyid(p_xitor_id, id.umgmt_users.cf.xitor_key, v_user_name);
+        end if;
+
+    exception when no_data_found then
+        return;
+    end set_user_trackor_on_new_trackor;
+    
+    procedure set_user_class(p_xitor_id in xitor.xitor_id%type) as
+        v_role2 number;
+        v_role3 number;
+        v_field_vizion number;
+        v_roles_cnt number;
+        v_user_id users.user_id%type;
+    begin
+        
+        select user_id
+          into v_user_id
+          from users
+         where xitor_id = p_xitor_id;
+         
+        select count(*) 
+          into v_role2 
+          from user_sec_role 
+         where user_id = v_user_id 
+           and sec_role_id in (select sec_role_id 
+                                 from sec_role
+                                where role_type = c_exec_user_rt);
+        
+        select count(*) 
+          into v_role3 
+          from user_sec_role 
+         where user_id = v_user_id 
+           and sec_role_id in (select sec_role_id 
+                                 from sec_role
+                                where role_type = c_vendor_pool_rt);
+        
+        select count(*) 
+          into v_field_vizion 
+          from user_sec_role 
+         where user_id = v_user_id 
+           and sec_role_id in (select sec_role_id 
+                                 from sec_role
+                                where role_type = c_checklist_fieldvizion_rt);
+        
+        select count(*)
+          into v_roles_cnt
+          from user_sec_role
+         where user_id = v_user_id;
+        
+        if nvl(util.getvalnumbyid(p_xitor_id, id.umgmt_users.cf.umgmt_us_admin_nc), 0) = 1 then
+            util.setvalnumbyid(p_xitor_id, id.umgmt_users.cf.umgmt_us_user_class, id.vt.v_umgmt_us_user_class.admin_nc, 1);
+        elsif v_role2 = 1 then
+            util.setvalnumbyid(p_xitor_id, id.umgmt_users.cf.umgmt_us_user_class, id.vt.v_umgmt_us_user_class.role2_executive, 1);
+        elsif v_role3 = 1 then
+            util.setvalnumbyid(p_xitor_id, id.umgmt_users.cf.umgmt_us_user_class, id.vt.v_umgmt_us_user_class.role3_vendor, 1);
+        elsif v_field_vizion = 1 and v_roles_cnt = 1 then
+            util.setvalnumbyid(p_xitor_id, id.umgmt_users.cf.umgmt_us_user_class, id.vt.v_umgmt_us_user_class.checklist_user, 1);
+        else
+            util.setvalnumbyid(p_xitor_id, id.umgmt_users.cf.umgmt_us_user_class, id.vt.v_umgmt_us_user_class.role1_full_user, 1);
+        end if;
+
+    end set_user_class;
+    
+    procedure user_aging as
+        v_xitor_id number;
+        v_site_name varchar2 (4000);
+        v_days_from_last_login number;
+        v_days_from_last_pwd_change number;
+        v_max_create_user_days number;
+        v_max_login_user_days number;
+        v_last_sec_token_exp_date date;
+        v_last_enable_date date;
+        v_current_date date := current_date;
+        
+        cursor cur_user_list is
+            select u.user_id,
+                   u.un,
+                   u.email,
+                   util.getvalnumbyid(u.xitor_id, id.umgmt_users.cf.umgmt_us_days_to_live) days_to_live,
+                   util.getvaldatebyid(u.xitor_id, id.umgmt_users.cf.umgmt_us_disabled_date) date_disabled,
+                   u.last_login_date,
+                   u.pwd_last_changed,
+                   q.last_enable_date,
+                   aut.expiration_ts,
+                   u.xitor_id
+              from users u
+              left join (
+                  select max(l.ts) last_enable_date,
+                         pk.pk_value user_id
+                    from audit_log_comp l
+                    join audit_log_comp_pk pk on pk.audit_log_comp_id = l.audit_log_comp_id
+                    join audit_log_comp_col col on col.audit_log_comp_id = l.audit_log_comp_id
+                    join audit_log_comp_col_un_val val on val.audit_log_comp_col_id = col.audit_log_comp_col_id
+                   where l.table_name = &apos;USERS&apos;
+                     and col.column_name = &apos;IS_DISABLED&apos;
+                     and ((to_char(val.new_val) is not null and to_char(val.new_val) &lt;&gt; &apos;1&apos;) or to_char(val.new_val) is null)
+                     and ((to_char(val.old_val) is not null and to_char(val.old_val) = &apos;1&apos;) or to_char(val.old_val) is null)
+                   group by pk.pk_value
+              ) q on q.user_id = to_char(u.user_id)
+              left join (
+                  select max(expiration_ts) expiration_ts,
+                         user_id
+                    from auth_token
+                   group by user_id
+              ) aut on aut.user_id = u.user_id
+         where is_disabled = 0
+           and u.user_id not in(
+               select user_id
+                 from user_sec_role
+                where sec_role_id in (select sec_role_id 
+                                        from sec_role
+                                       where role_type = c_never_expire_rt)
+           )
+           and (lock_expires is null or lock_expires &lt; v_current_date);
+        rec cur_user_list%rowtype;
+    begin
+    
+        select value
+          into v_site_name
+          from param_system
+         where name = &apos;DomainName&apos;;
+         
+        open cur_user_list;
+        loop
+            fetch cur_user_list into rec;
+            exit when cur_user_list%notfound;
+        
+            if v_last_sec_token_exp_date is not null
+            and (rec.last_enable_date is null or rec.last_enable_date &lt; v_last_sec_token_exp_date)
+            then
+                v_last_enable_date := v_last_sec_token_exp_date;
+            else
+                v_last_enable_date := rec.last_enable_date;
+            end if;
+        
+            if 
+            (
+                (rec.days_to_live is null and ((round(v_current_date - rec.pwd_last_changed) &gt; c_max_create_user_days and rec.last_login_date is null) or round(v_current_date - rec.last_login_date) &gt; c_max_login_user_days)) 
+                or 
+                (rec.days_to_live is not null and ((round(v_current_date - rec.pwd_last_changed) &gt; rec.days_to_live and rec.last_login_date is null) or round(v_current_date - rec.last_login_date)  &gt; rec.days_to_live)) 
+                or 
+                (round(v_current_date - rec.date_disabled) &gt; 0 and rec.date_disabled is not null)
+            ) 
+            and
+            (round(v_current_date - v_last_enable_date) &gt; c_reenable_days or v_last_enable_date is null)
+            then
+                update users
+                   set is_disabled = 1
+                 where user_id = rec.user_id;
+            
+                if rec.xitor_id is not null then
+                    util.setvaldatebyid(rec.xitor_id, id.umgmt_users.cf.umgmt_us_disabled_date, v_current_date);
+                end if;
+            end if;
+        
+            v_days_from_last_login := round(v_current_date - rec.last_login_date);
+            v_days_from_last_pwd_change := round(v_current_date - rec.pwd_last_changed);
+        
+            if rec.days_to_live is null then
+                v_max_create_user_days := c_max_create_user_days;
+                v_max_login_user_days := c_max_login_user_days;
+            else
+                v_max_create_user_days := rec.days_to_live;
+                v_max_login_user_days := rec.days_to_live;
+            end if;
+        
+            if (v_days_from_last_pwd_change = v_max_create_user_days - 2 and rec.last_login_date is null) 
+            or v_days_from_last_login = v_max_login_user_days - 2
+            then
+                util.sendmail(pkg_label.format(-5389941, pkg_label.list_label_params(&apos;p_rec_un&apos; =&gt; rec.un, &apos;p_site_name&apos; =&gt; v_site_name, &apos;p_days&apos; =&gt; 2, &apos;error_message&apos; =&gt; &apos;Invalid Number&apos;)), pkg_label.format(-5389946, pkg_label.list_label_params(&apos;p_rec_un&apos; =&gt; rec.un, &apos;p_site_name&apos; =&gt; v_site_name, &apos;p_days&apos; =&gt; 2, &apos;error_message&apos; =&gt; &apos;Invalid Number&apos;)), null, rec.email);
+                continue;
+            end if;
+        
+            if (v_days_from_last_pwd_change = v_max_create_user_days - 7 and rec.last_login_date is null) 
+            or v_days_from_last_login = v_max_login_user_days - 7
+            then
+                util.sendmail(pkg_label.format(-5389941, pkg_label.list_label_params(&apos;p_rec_un&apos; =&gt; rec.un, &apos;p_site_name&apos; =&gt; v_site_name, &apos;p_days&apos; =&gt; 7, &apos;error_message&apos; =&gt; &apos;Invalid Number&apos;)), pkg_label.format(-5389946, pkg_label.list_label_params(&apos;p_rec_un&apos; =&gt; rec.un, &apos;p_site_name&apos; =&gt; v_site_name, &apos;p_days&apos; =&gt; 7, &apos;error_message&apos; =&gt; &apos;Invalid Number&apos;)), null, rec.email);
+            end if;
+        end loop;
+        close cur_user_list;
+    
+    end user_aging;
+    
+    function user_have_any_privilleges (p_user_id in users.user_id%type) return number as
+        v_cnt number;
+    begin
+        with data as (
+            select sr.sec_role_id,
+                   srrp.priv
+              from sec_role sr
+              join sec_role_priv_program srrp on
+                  sr.sec_role_id = srrp.sec_role_id
+                  and sr.program_id = srrp.program_id
+              join sec_group_program sgp on srrp.sec_group_program_id = sgp.sec_group_program_id
+             where sr.program_id = pkg_sec.get_pid()
+             union
+            select sr.sec_role_id,
+                   srrs.priv
+              from sec_role sr
+              join sec_role_priv_system srrs on 
+                  sr.sec_role_id = srrs.sec_role_id
+                  and sr.program_id = srrs.program_id
+              join sec_group_system sgs on srrs.sec_group_system_id = sgs.sec_group_system_id
+             where sr.program_id = pkg_sec.get_pid()
+        )
+        select count(d.sec_role_id)
+          into v_cnt
+          from data d
+          join user_sec_role usr on
+              usr.sec_role_id = d.sec_role_id
+              and usr.user_id = p_user_id
+         where rownum = 1
+           and (d.priv like &apos;%R%&apos; or d.priv like &apos;%E%&apos; or d.priv like &apos;%A%&apos; or d.priv like &apos;%D%&apos;);
+        return v_cnt;
+    end user_have_any_privilleges;
+    
+    function user_have_ead_privilleges (p_user_id in users.user_id%type) return number as
+        v_cnt number;
+    begin
+        with data as (
+            select sr.sec_role_id,
+                   srrp.priv
+              from sec_role sr
+              join sec_role_priv_program srrp on
+                  sr.sec_role_id = srrp.sec_role_id
+                  and sr.program_id = srrp.program_id
+              join sec_group_program sgp on srrp.sec_group_program_id = sgp.sec_group_program_id
+             where sr.program_id = pkg_sec.get_pid()
+             union
+            select sr.sec_role_id,
+                   srrs.priv
+              from sec_role sr
+              join sec_role_priv_system srrs on 
+                  sr.sec_role_id = srrs.sec_role_id
+                  and sr.program_id = srrs.program_id
+              join sec_group_system sgs on 
+                  srrs.sec_group_system_id = sgs.sec_group_system_id
+                  and sgs.sec_group_system_id &lt;&gt; 1001116 /*&quot;EFile Browser&quot; page*/
+             where sr.program_id = pkg_sec.get_pid()
+        )
+        select count(d.sec_role_id)
+          into v_cnt
+          from data d
+          join user_sec_role usr on
+              usr.sec_role_id = d.sec_role_id
+              and usr.user_id = p_user_id
+         where rownum = 1
+           and (d.priv like &apos;%E%&apos; or d.priv like &apos;%A%&apos; or d.priv like &apos;%D%&apos;);
+        return v_cnt;
+    end user_have_ead_privilleges;
+    
+    function user_have_menu_privilleges (p_user_id in users.user_id%type) return number as
+        v_cnt number;
+    begin
+        select count(*)
+          into v_cnt
+          from user_sec_role usr
+          join sec_role_obj_xref srox on usr.sec_role_id = srox.sec_role_id
+          join application a on 
+              srox.obj_id = a.application_id
+              and a.program_id &lt;&gt; 0
+         where usr.user_id = p_user_id
+           and rownum = 1;
+        return v_cnt;
+    end user_have_menu_privilleges;
+    
+    function user_have_field_vizion (p_user_id in users.user_id%type) return number as
+        v_cnt number;
+    begin
+        with data as (
+            select sr.sec_role_id,
+                   sgp.security_group,
+                   srrp.priv
+              from sec_role sr
+              join sec_role_priv_program srrp on
+                  sr.sec_role_id = srrp.sec_role_id
+                  and sr.program_id = srrp.program_id
+              join sec_group_program sgp on srrp.sec_group_program_id = sgp.sec_group_program_id
+             where sr.program_id = pkg_sec.get_pid()
+             union
+            select sr.sec_role_id,
+                   sgs.security_group,
+                   srrs.priv
+              from sec_role sr
+              join sec_role_priv_system srrs on 
+                  sr.sec_role_id = srrs.sec_role_id
+                  and sr.program_id = srrs.program_id
+              join sec_group_system sgs on srrs.sec_group_system_id = sgs.sec_group_system_id
+             where sr.program_id = pkg_sec.get_pid()
+        )
+        select count(d.sec_role_id)
+          into v_cnt
+          from data d
+          join user_sec_role usr on
+              usr.sec_role_id = d.sec_role_id
+              and usr.user_id = p_user_id
+         where rownum = 1
+           and d.security_group = &apos;FIELD_VIZION&apos;
+           and d.priv like &apos;%R%&apos;;
+        return v_cnt;
+    end user_have_field_vizion;
+    
+    function user_have_admin_groups (p_user_id in users.user_id%type) return number as
+        v_cnt number;
+    begin
+        with data as (
+            select sr.sec_role_id,
+                   sgp.security_group,
+                   srrp.priv,
+                   sgp.description
+              from sec_role sr
+              join sec_role_priv_program srrp on
+                  sr.sec_role_id = srrp.sec_role_id
+                  and sr.program_id = srrp.program_id
+              join sec_group_program sgp on srrp.sec_group_program_id = sgp.sec_group_program_id
+             where sr.program_id = pkg_sec.get_pid()
+             union
+            select sr.sec_role_id,
+                   sgs.security_group,
+                   srrs.priv,
+                   sgs.description
+              from sec_role sr
+              join sec_role_priv_system srrs on 
+                  sr.sec_role_id = srrs.sec_role_id
+                  and sr.program_id = srrs.program_id
+              join sec_group_system sgs on srrs.sec_group_system_id = sgs.sec_group_system_id
+             where sr.program_id = pkg_sec.get_pid()
+        )
+        select count(d.sec_role_id)
+          into v_cnt
+          from data d
+          join user_sec_role usr on
+              usr.sec_role_id = d.sec_role_id
+              and usr.user_id = p_user_id
+         where rownum = 1
+           and d.security_group like &apos;ADMIN_%&apos;
+           and (d.priv like &apos;%E%&apos; or d.priv like &apos;%A%&apos; or d.priv like &apos;%D%&apos;)
+           and d.description &lt;&gt; &apos;Configured Tab&apos;;
+        return v_cnt;
+    end user_have_admin_groups;
+    
+    function user_have_limited_access (p_user_id in users.user_id%type) return number as
+        v_cnt number;
+    begin
+        select count(*)
+          into v_cnt
+          from user_sec_role usr
+          join sec_role sr on usr.sec_role_id = sr.sec_role_id
+         where usr.user_id = p_user_id
+           and rownum = 1
+           and upper(sr.role_type) like &apos;%LIMITED ACCESS%&apos;;
+        return v_cnt;
+    end user_have_limited_access;
+    
+    function user_have_no_charge_role (p_user_id in users.user_id%type) return number as
+        v_cnt number;
+    begin
+        select count(*)
+          into v_cnt
+          from user_sec_role usr
+          join sec_role sr on usr.sec_role_id = sr.sec_role_id
+         where usr.user_id = p_user_id
+           and rownum = 1
+           and upper(sr.role_type) like &apos;%NO CHARGE%&apos;;
+        return v_cnt;
+    end user_have_no_charge_role;
+    
+    procedure user_flags(p_xitor_id in xitor.xitor_id%type) as
+        v_user_id users.user_id%type;
+        v_admin_email number;
+        v_sec_roles_cnt number;
+        v_selected_field_id number;
+    begin
+    
+        select user_id 
+          into v_user_id 
+          from users 
+         where xitor_id = p_xitor_id;
+        
+        select count(user_id) 
+          into v_admin_email 
+          from users 
+         where user_id = v_user_id 
+           and (
+               lower(email) like &apos;%@onevizion.com&apos; 
+               or lower(email) like &apos;%@sample%&apos; 
+               or lower(email) like &apos;%@test%&apos;
+           );
+           
+        select count(user_id) 
+          into v_sec_roles_cnt 
+          from user_sec_role 
+         where user_id = v_user_id
+           and rownum = 1;
+       
+        if v_admin_email = 1 
+        or v_sec_roles_cnt = 0
+        or user_have_any_privilleges(v_user_id) = 0
+        or (v_sec_roles_cnt = 1 and user_have_no_charge_role(v_user_id) = 1)
+        or util.getvalnumbyid(p_xitor_id, id.umgmt_users.cf.umgmt_us_no_charge) = 1
+        then
+            v_selected_field_id := id.umgmt_users.cf.umgmt_us_admin_nc;
+        elsif user_have_ead_privilleges(v_user_id) = 0 then
+            v_selected_field_id := id.umgmt_users.cf.umgmt_us_read_only;
+        elsif user_have_menu_privilleges(v_user_id) = 0 and user_have_field_vizion(v_user_id) = 1 then
+            v_selected_field_id := id.umgmt_users.cf.umgmt_us_mobile_only;
+        elsif user_have_admin_groups(v_user_id) = 1 then
+            v_selected_field_id := id.umgmt_users.cf.umgmt_us_administrator;
+        elsif user_have_limited_access(v_user_id) = 1 and v_sec_roles_cnt = 1 then
+            v_selected_field_id := id.umgmt_users.cf.umgmt_us_limited_access;
+        else
+            v_selected_field_id := id.umgmt_users.cf.umgmt_us_desktop_full_user;
+        end if;
+    
+        for rec in (
+            select config_field_id
+              from config_field
+             where config_field_id in (id.umgmt_users.cf.umgmt_us_admin_nc, id.umgmt_users.cf.umgmt_us_read_only, id.umgmt_users.cf.umgmt_us_mobile_only, id.umgmt_users.cf.umgmt_us_administrator, id.umgmt_users.cf.umgmt_us_limited_access, id.umgmt_users.cf.umgmt_us_desktop_full_user)
+               and config_field_id &lt;&gt; v_selected_field_id
+        ) loop
+            util.setvalnumbyid(p_xitor_id, rec.config_field_id, 0);
+        end loop;
+        util.setvalnumbyid(p_xitor_id, v_selected_field_id, 1);
+    
+    exception when no_data_found then 
+        return;    
+    end user_flags;
+    
+    procedure set_disabled_enabled_created_date(p_user_id in users.user_id%type) as
+        v_creation_date audit_log_comp.ts%type;
+        v_user_trackor_id users.xitor_id%type;
+        v_is_disabled users.is_disabled%type;
+        v_last_disabled audit_log_comp.ts%type;
+        v_last_enabled audit_log_comp.ts%type;
+    begin
+        
+        begin
+            select min(alc.ts) ts
+              into v_creation_date
+              from users u
+              join audit_log_comp_main_pk alcmp on alcmp.pk_value = u.user_id
+                                               and alcmp.pk_column_name = &apos;USER_ID&apos;
+                                               and u.user_id = p_user_id
+              join audit_log_comp alc on alc.audit_log_comp_id  = alcmp.audit_log_comp_id
+                                     and alc.table_name = &apos;USERS&apos;;
+        exception when no_data_found then
+            v_creation_date := null;
+        end;
+    
+        select xitor_id, 
+               is_disabled
+          into v_user_trackor_id, 
+               v_is_disabled
+          from users
+         where user_id = p_user_id;
+
+        if v_is_disabled = 1 then
+            begin
+                select max(alc.ts)
+                  into v_last_disabled
+                  from audit_log_comp_pk alcp
+                  join audit_log_comp alc on alc.audit_log_comp_id = alcp.audit_log_comp_id
+                  join audit_log_comp_col alcc on alcc.audit_log_comp_id = alc.audit_log_comp_id
+                  join audit_log_comp_col_un_val alccuv on alccuv.audit_log_comp_col_id = alcc.audit_log_comp_col_id
+                 where alccuv.new_val like to_clob(1) 
+                   and alc.table_name = &apos;USERS&apos;
+                   and alcc.column_name = &apos;IS_DISABLED&apos; 
+                   and alcp.pk_value = to_char(p_user_id);
+            exception when no_data_found then
+                v_last_disabled := null;
+            end;
+        end if;
+    
+        if v_is_disabled = 0 then
+            begin
+                select max(alc.ts)
+                  into v_last_enabled
+                  from audit_log_comp_pk alcp
+                  join audit_log_comp alc on alc.audit_log_comp_id = alcp.audit_log_comp_id
+                  join audit_log_comp_col alcc on alcc.audit_log_comp_id = alc.audit_log_comp_id
+                  join audit_log_comp_col_un_val alccuv on alccuv.audit_log_comp_col_id = alcc.audit_log_comp_col_id
+                 where alccuv.new_val like to_clob(0) 
+                   and alc.table_name = &apos;USERS&apos; 
+                   and alcc.column_name = &apos;IS_DISABLED&apos; 
+                   and alcp.pk_value = to_char(p_user_id);
+            exception when no_data_found then
+                v_last_enabled := null;
+            end;
+        end if;
+    
+        if v_user_trackor_id is null then
+            return;
+        end if;
+    
+        util.setvaldatebyid(v_user_trackor_id, id.umgmt_users.cf.umgmt_us_disabled_date, v_last_disabled);
+        util.setvaldatebyid(v_user_trackor_id, id.umgmt_users.cf.umgmt_us_enabled_date, v_last_enabled);
+        util.setvaldatebyid(v_user_trackor_id, id.umgmt_users.cf.umgmt_us_created_date, v_creation_date);
+        
+    end set_disabled_enabled_created_date;
+    
+    procedure user_class(p_xitor_id in xitor.xitor_id%type) as
+        v_user_id users.user_id%type;
+        v_admin_email number;
+        v_sec_roles_cnt number;
+        v_selected_field_id config_field.config_field_id%type;
+    begin
+    
+        select user_id 
+          into v_user_id 
+          from users 
+         where xitor_id = p_xitor_id;
+         
+        select count(user_id) 
+          into v_admin_email 
+          from users 
+         where user_id = v_user_id 
+           and (
+               lower(email) like &apos;%@onevizion.com&apos; 
+               or lower(email) like &apos;%@sample%&apos; 
+               or lower(email) like &apos;%@test%&apos;
+          );
+          
+        select count(user_id) 
+          into v_sec_roles_cnt 
+          from user_sec_role 
+         where user_id = v_user_id;
+
+        if v_admin_email = 1 
+        or v_sec_roles_cnt = 0
+        or user_have_any_privilleges(v_user_id) = 0
+        or (v_sec_roles_cnt = 1 and user_have_no_charge_role(v_user_id) = 1)
+        or util.getvalnumbyid(p_xitor_id, id.umgmt_users.cf.umgmt_us_no_charge) = 1
+        then
+            v_selected_field_id := id.umgmt_users.cf.umgmt_us_admin_nc;
+        elsif user_have_ead_privilleges(v_user_id) = 0 then
+            v_selected_field_id := id.umgmt_users.cf.umgmt_us_read_only;
+        elsif user_have_menu_privilleges(v_user_id) = 0 and user_have_field_vizion(v_user_id) = 1 then
+            v_selected_field_id := id.umgmt_users.cf.umgmt_us_mobile_only;
+        elsif user_have_admin_groups(v_user_id) = 1 then
+            v_selected_field_id := id.umgmt_users.cf.umgmt_us_administrator;
+        elsif user_have_limited_access(v_user_id) = 1 and v_sec_roles_cnt = 1 then
+            v_selected_field_id := id.umgmt_users.cf.umgmt_us_limited_access;
+        else
+            v_selected_field_id := id.umgmt_users.cf.umgmt_us_desktop_full_user;
+        end if;
+
+        for rec in (
+            select config_field_id
+              from config_field
+             where config_field_id in (id.umgmt_users.cf.umgmt_us_admin_nc, id.umgmt_users.cf.umgmt_us_read_only, id.umgmt_users.cf.umgmt_us_mobile_only, id.umgmt_users.cf.umgmt_us_administrator, id.umgmt_users.cf.umgmt_us_limited_access, id.umgmt_users.cf.umgmt_us_desktop_full_user)
+               and config_field_id &lt;&gt; v_selected_field_id
+        ) loop
+            util.setvalnumbyid(p_xitor_id, rec.config_field_id, 0);
+        end loop;
+        util.setvalnumbyid(p_xitor_id, v_selected_field_id, 1);
+
+        if util.getvalnumbyid(p_xitor_id, id.umgmt_users.cf.umgmt_us_admin_nc) = 1 then
+            util.setvalnumbyid(p_xitor_id, id.umgmt_users.cf.umgmt_us_user_class_2, id.vt.v_umgmt_us_user_class_2.no_charge, 1);
+        elsif util.getvalnumbyid(p_xitor_id, id.umgmt_users.cf.umgmt_us_read_only) = 1 then
+            util.setvalnumbyid(p_xitor_id, id.umgmt_users.cf.umgmt_us_user_class_2, id.vt.v_umgmt_us_user_class_2.read_only, 1);
+        elsif util.getvalnumbyid(p_xitor_id, id.umgmt_users.cf.umgmt_us_mobile_only) = 1 then
+            util.setvalnumbyid(p_xitor_id, id.umgmt_users.cf.umgmt_us_user_class_2, id.vt.v_umgmt_us_user_class_2.mobile_only, 1);
+        elsif util.getvalnumbyid(p_xitor_id, id.umgmt_users.cf.umgmt_us_administrator) = 1 then
+            util.setvalnumbyid(p_xitor_id, id.umgmt_users.cf.umgmt_us_user_class_2, id.vt.v_umgmt_us_user_class_2.administrator, 1);
+        elsif util.getvalnumbyid(p_xitor_id, id.umgmt_users.cf.umgmt_us_limited_access) = 1 then
+            util.setvalnumbyid(p_xitor_id, id.umgmt_users.cf.umgmt_us_user_class_2, id.vt.v_umgmt_us_user_class_2.limited_access, 1);
+        elsif util.getvalnumbyid(p_xitor_id, id.umgmt_users.cf.umgmt_us_desktop_full_user) = 1 then
+            util.setvalnumbyid(p_xitor_id, id.umgmt_users.cf.umgmt_us_user_class_2, id.vt.v_umgmt_us_user_class_2.full_user, 1);
+        end if;
+
+    exception when no_data_found then 
+        return;
+    end user_class;
+    
+    procedure welcome_account_creation(p_user_id in users.user_id%type) as
+        v_msg clob;
+        v_app_name param_system.value%type;
+        v_un users.un%type;
+        v_reply_email param_system.value%type;
+        v_email users.email%type;
+        v_first_name config_value_char.value_char%type;
+        v_title varchar2(4000);
+        v_user_xid users.xitor_id%type;
+        v_new_password varchar2(4000);
+        v_url param_system.value%type;
+    begin
+    
+	    v_msg := pkg_label.get_label_program(-5389947);
+        begin
+            select xitor_id, 
+                   un, 
+                   email
+              into v_user_xid, 
+                   v_un, 
+                   v_email
+              from users 
+             where user_id = p_user_id;
+        exception when no_data_found then
+            return;
+        end;
+    
+        if lower(v_un) like &apos;fvu_%&apos; then 
+            return; 
+        end if;
+
+        if v_msg is not null 
+        and v_email is not null 
+        then                       
+
+            v_new_password := lower(dbms_random.string(&apos;x&apos;, 10));
+            update users 
+               set pwd = pkg_vqsecurity.encrypt(v_new_password), 
+                   must_change_password = 1, 
+                   pwd_last_changed = current_date 
+             where user_id = p_user_id;
+   
+            begin
+                select nvl(value, &apos;OneVizion&apos;)
+                  into v_app_name
+                  from param_system
+                 where name = &apos;AppName&apos;;
+            exception when no_data_found then
+                v_app_name := &apos;OneVizion&apos;;
+            end;
+            
+            select value
+              into v_reply_email
+              from param_system
+             where name = &apos;ReplyToAdminEmail&apos;;
+
+            select value
+              into v_url
+              from param_system
+             where name = &apos;DomainName&apos;;
+
+            if v_user_xid is not null then
+                v_first_name := nvl(util.getvalstrbyid(v_user_xid, id.umgmt_users.cf.umgmt_us_first_name), v_un);
+            else
+                v_first_name := v_un;          
+            end if;
+            
+            v_msg := replace(v_msg, &apos;[FirstName]&apos;, v_first_name);
+            v_msg := replace(v_msg, &apos;[PSUN]&apos;, v_un);
+            v_msg := replace(v_msg, &apos;[PSPWD]&apos;, v_new_password);
+            v_msg := replace(v_msg, &apos;[WEBSITE]&apos;, v_url);
+
+            v_title := &apos;Welcome to &apos;|| v_app_name;   
+
+            util.sendmail(v_title, v_msg, v_reply_email, v_email, null, null, &apos;html&apos;);
+            
+        end if;
+    
+    end welcome_account_creation;
+    
+    procedure welcome_account_reactivation(p_user_id in users.user_id%type) as
+        v_msg clob;
+        v_is_reactivated number;
+        v_app_name param_system.value%type;
+        v_un users.un%type;
+        v_reply_email param_system.value%type;
+        v_email users.email%type;
+        v_first_name config_value_char.value_char%type;
+        v_title varchar2(4000);
+        v_user_xid users.xitor_id%type;
+        v_url param_system.value%type;
+    begin
+    
+        v_msg := pkg_label.get_label_program(-5389944);
+
+        begin
+            select xitor_id, 
+                   un, 
+                   email
+              into v_user_xid, 
+                   v_un, 
+                   v_email
+              from users 
+             where user_id = p_user_id;
+        exception when no_data_found then
+            return;
+        end;
+
+        if v_email is not null then        
+            for rec in (
+                select alccuv.old_val
+                  from audit_log_comp alc
+                  join audit_log_comp_col alcc on 
+                      alcc.audit_log_comp_id = alc.audit_log_comp_id
+                      and alcc.column_name = &apos;IS_DISABLED&apos;
+                  join audit_log_comp_col_un_val alccuv on alccuv.audit_log_comp_col_id = alcc.audit_log_comp_col_id
+                  join audit_log_comp_pk alcp on 
+                      alcp.audit_log_comp_id = alc.audit_log_comp_id
+                      and alcp.pk_value = to_char(p_user_id)
+                 where alc.table_name = &apos;USERS&apos;
+                   and alc.ts &gt;= current_date - 1 / (24 * 12)
+                 order by alc.ts asc
+            ) loop
+                if util.isnumber(rec.old_val) &gt; 0 then
+                    v_is_reactivated := to_number(rec.old_val);
+                end if;
+            end loop;
+
+            if v_is_reactivated = 1 then 
+
+                begin
+                    select nvl(value, &apos;OneVizion&apos;)
+                      into v_app_name
+                      from param_system
+                     where name = &apos;AppName&apos;;
+                exception when no_data_found then
+                    v_app_name := &apos;OneVizion&apos;;
+                end;
+
+                select value
+                  into v_reply_email
+                  from param_system
+                 where name = &apos;ReplyToAdminEmail&apos;;
+
+                select value
+                  into v_url
+                  from param_system
+                 where name = &apos;DomainName&apos;;
+                
+                if v_user_xid is not null then
+                    v_first_name := nvl(util.getvalstrbyid(v_user_xid, id.umgmt_users.cf.umgmt_us_first_name), v_un);
+                else
+                    v_first_name := v_un;          
+                end if;       
+            
+                v_msg := replace(v_msg, &apos;[FirstName]&apos;, v_first_name);
+		        v_msg := replace(v_msg, &apos;[WEBSITE]&apos;, v_url);
+
+                v_title := &apos;Welcome back to &apos;|| v_app_name || &apos; (&apos; || v_url || &apos;)&apos;;   
+
+                util.sendmail(v_title, v_msg, v_reply_email, v_email, null, null, &apos;html&apos;);
+                
+            end if;
+        
+        end if;
+    
+    end welcome_account_reactivation;
+    
+end;</DB_PACKAGE_BODY>
+  <DB_PACKAGE_ID>10064980</DB_PACKAGE_ID>
+  <PROGRAM_ID>1000979402</PROGRAM_ID>
+  <BPD_ITEMS/>
+  <COMPONENT_PACKAGES/>
+  <COMPONENT_LABELS>
+   <LIST_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>-5389955</APP_LABEL_ID>
+     <LABEL_TEXT>Your password must meet the following complexity rules:</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>-5389955</APP_LABEL_ID>
+     <LABEL_TEXT>Your password must meet the following complexity rules:</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>-5389955</APP_LABEL_ID>
+     <LABEL_TEXT>Your password must meet the following complexity rules:</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>-5389955</APP_LABEL_ID>
+     <LABEL_TEXT>Your password must meet the following complexity rules:</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>20</APP_LANG_ID>
+     <APP_LABEL_ID>-5389955</APP_LABEL_ID>
+     <LABEL_TEXT>Your password must meet the following complexity rules:</LABEL_TEXT>
+    </T_LABEL>
+   </LIST_LABEL>
+   <LIST_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>-5389954</APP_LABEL_ID>
+     <LABEL_TEXT>Your password must meet the following rule about the password&apos;s length:</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>-5389954</APP_LABEL_ID>
+     <LABEL_TEXT>Your password must meet the following rule about the password&apos;s length:</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>-5389954</APP_LABEL_ID>
+     <LABEL_TEXT>Your password must meet the following rule about the password&apos;s length:</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>-5389954</APP_LABEL_ID>
+     <LABEL_TEXT>Your password must meet the following rule about the password&apos;s length:</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>20</APP_LANG_ID>
+     <APP_LABEL_ID>-5389954</APP_LABEL_ID>
+     <LABEL_TEXT>Your password must meet the following rule about the password&apos;s length:</LABEL_TEXT>
+    </T_LABEL>
+   </LIST_LABEL>
+   <LIST_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>-5389953</APP_LABEL_ID>
+     <LABEL_TEXT>not more than 2 identical characters in a row</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>-5389953</APP_LABEL_ID>
+     <LABEL_TEXT>not more than 2 identical characters in a row</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>-5389953</APP_LABEL_ID>
+     <LABEL_TEXT>not more than 2 identical characters in a row</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>-5389953</APP_LABEL_ID>
+     <LABEL_TEXT>not more than 2 identical characters in a row</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>20</APP_LANG_ID>
+     <APP_LABEL_ID>-5389953</APP_LABEL_ID>
+     <LABEL_TEXT>not more than 2 identical characters in a row</LABEL_TEXT>
+    </T_LABEL>
+   </LIST_LABEL>
+   <LIST_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>-5389952</APP_LABEL_ID>
+     <LABEL_TEXT>at least 1 special character (punctuation)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>-5389952</APP_LABEL_ID>
+     <LABEL_TEXT>at least 1 special character (punctuation)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>-5389952</APP_LABEL_ID>
+     <LABEL_TEXT>at least 1 special character (punctuation)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>-5389952</APP_LABEL_ID>
+     <LABEL_TEXT>at least 1 special character (punctuation)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>20</APP_LANG_ID>
+     <APP_LABEL_ID>-5389952</APP_LABEL_ID>
+     <LABEL_TEXT>at least 1 special character (punctuation)</LABEL_TEXT>
+    </T_LABEL>
+   </LIST_LABEL>
+   <LIST_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>-5389951</APP_LABEL_ID>
+     <LABEL_TEXT>at least 1 uppercase character (A-Z)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>-5389951</APP_LABEL_ID>
+     <LABEL_TEXT>at least 1 uppercase character (A-Z)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>-5389951</APP_LABEL_ID>
+     <LABEL_TEXT>at least 1 uppercase character (A-Z)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>-5389951</APP_LABEL_ID>
+     <LABEL_TEXT>at least 1 uppercase character (A-Z)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>20</APP_LANG_ID>
+     <APP_LABEL_ID>-5389951</APP_LABEL_ID>
+     <LABEL_TEXT>at least 1 uppercase character (A-Z)</LABEL_TEXT>
+    </T_LABEL>
+   </LIST_LABEL>
+   <LIST_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>-5389950</APP_LABEL_ID>
+     <LABEL_TEXT>Maximum length of the password should be NO more than 128 characters.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>-5389950</APP_LABEL_ID>
+     <LABEL_TEXT>Maximum length of the password should be NO more than 128 characters.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>-5389950</APP_LABEL_ID>
+     <LABEL_TEXT>Maximum length of the password should be NO more than 128 characters.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>-5389950</APP_LABEL_ID>
+     <LABEL_TEXT>Maximum length of the password should be NO more than 128 characters.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>20</APP_LANG_ID>
+     <APP_LABEL_ID>-5389950</APP_LABEL_ID>
+     <LABEL_TEXT>Maximum length of the password should be NO more than 128 characters.</LABEL_TEXT>
+    </T_LABEL>
+   </LIST_LABEL>
+   <LIST_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>-5389949</APP_LABEL_ID>
+     <LABEL_TEXT>at least 1 digit (0-9)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>-5389949</APP_LABEL_ID>
+     <LABEL_TEXT>at least 1 digit (0-9)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>-5389949</APP_LABEL_ID>
+     <LABEL_TEXT>at least 1 digit (0-9)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>-5389949</APP_LABEL_ID>
+     <LABEL_TEXT>at least 1 digit (0-9)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>20</APP_LANG_ID>
+     <APP_LABEL_ID>-5389949</APP_LABEL_ID>
+     <LABEL_TEXT>at least 1 digit (0-9)</LABEL_TEXT>
+    </T_LABEL>
+   </LIST_LABEL>
+   <LIST_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>-5389948</APP_LABEL_ID>
+     <LABEL_TEXT>at least 1 lowercase character (a-z)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>-5389948</APP_LABEL_ID>
+     <LABEL_TEXT>at least 1 lowercase character (a-z)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>-5389948</APP_LABEL_ID>
+     <LABEL_TEXT>at least 1 lowercase character (a-z)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>-5389948</APP_LABEL_ID>
+     <LABEL_TEXT>at least 1 lowercase character (a-z)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>20</APP_LANG_ID>
+     <APP_LABEL_ID>-5389948</APP_LABEL_ID>
+     <LABEL_TEXT>at least 1 lowercase character (a-z)</LABEL_TEXT>
+    </T_LABEL>
+   </LIST_LABEL>
+   <LIST_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>-5389947</APP_LABEL_ID>
+     <LABEL_TEXT>[FirstName],
+
+Welcome to OneVizion!
+
+To access OneVizion:
+
+1.     Go to the website https://[WEBSITE].
+2.     Enter your Username and Password provided below and click &quot;Log In&quot;.
+3.     Once logged in, you will be required to change the system generated password.
+
+Username: [PSUN]
+Password: [PSPWD]
+
+(Note, you may need turn off the pop-up blocker or add this website to your allowed sites list to be able to fully use OneVizion.)
+
+Please feel free to look through our documentation on http://wiki.onevizion.com.
+
+Thank you,
+OneVizion Support</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>-5389947</APP_LABEL_ID>
+     <LABEL_TEXT>[FirstName],
+
+Welcome to OneVizion!
+
+To access OneVizion:
+
+1.     Go to the website https://[WEBSITE].
+2.     Enter your Username and Password provided below and click &quot;Log In&quot;.
+3.     Once logged in, you will be required to change the system generated password.
+
+Username: [PSUN]
+Password: [PSPWD]
+
+(Note, you may need turn off the pop-up blocker or add this website to your allowed sites list to be able to fully use OneVizion.)
+
+Please feel free to look through our documentation on http://wiki.onevizion.com.
+
+Thank you,
+OneVizion Support</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>-5389947</APP_LABEL_ID>
+     <LABEL_TEXT>[FirstName],
+
+Welcome to OneVizion!
+
+To access OneVizion:
+
+1.     Go to the website https://[WEBSITE].
+2.     Enter your Username and Password provided below and click &quot;Log In&quot;.
+3.     Once logged in, you will be required to change the system generated password.
+
+Username: [PSUN]
+Password: [PSPWD]
+
+(Note, you may need turn off the pop-up blocker or add this website to your allowed sites list to be able to fully use OneVizion.)
+
+Please feel free to look through our documentation on http://wiki.onevizion.com.
+
+Thank you,
+OneVizion Support</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>-5389947</APP_LABEL_ID>
+     <LABEL_TEXT>[FirstName],
+
+Welcome to OneVizion!
+
+To access OneVizion:
+
+1.     Go to the website https://[WEBSITE].
+2.     Enter your Username and Password provided below and click &quot;Log In&quot;.
+3.     Once logged in, you will be required to change the system generated password.
+
+Username: [PSUN]
+Password: [PSPWD]
+
+(Note, you may need turn off the pop-up blocker or add this website to your allowed sites list to be able to fully use OneVizion.)
+
+Please feel free to look through our documentation on http://wiki.onevizion.com.
+
+Thank you,
+OneVizion Support</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>20</APP_LANG_ID>
+     <APP_LABEL_ID>-5389947</APP_LABEL_ID>
+     <LABEL_TEXT>[FirstName],
+
+Welcome to OneVizion!
+
+To access OneVizion:
+
+1.     Go to the website https://[WEBSITE].
+2.     Enter your Username and Password provided below and click &quot;Log In&quot;.
+3.     Once logged in, you will be required to change the system generated password.
+
+Username: [PSUN]
+Password: [PSPWD]
+
+(Note, you may need turn off the pop-up blocker or add this website to your allowed sites list to be able to fully use OneVizion.)
+
+Please feel free to look through our documentation on http://wiki.onevizion.com.
+
+Thank you,
+OneVizion Support</LABEL_TEXT>
+    </T_LABEL>
+   </LIST_LABEL>
+   <LIST_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>-5389946</APP_LABEL_ID>
+     <LABEL_TEXT>Your account {p_rec_un} on {p_site_name}, will expire in {p_days} days. Please log into {p_site_name} to retain your account.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>-5389946</APP_LABEL_ID>
+     <LABEL_TEXT>Your account {p_rec_un} on {p_site_name}, will expire in {p_days} days. Please log into {p_site_name} to retain your account.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>-5389946</APP_LABEL_ID>
+     <LABEL_TEXT>Your account {p_rec_un} on {p_site_name}, will expire in {p_days} days. Please log into {p_site_name} to retain your account.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>-5389946</APP_LABEL_ID>
+     <LABEL_TEXT>Your account {p_rec_un} on {p_site_name}, will expire in {p_days} days. Please log into {p_site_name} to retain your account.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>20</APP_LANG_ID>
+     <APP_LABEL_ID>-5389946</APP_LABEL_ID>
+     <LABEL_TEXT>Your account {p_rec_un} on {p_site_name}, will expire in {p_days} days. Please log into {p_site_name} to retain your account.</LABEL_TEXT>
+    </T_LABEL>
+   </LIST_LABEL>
+   <LIST_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>-5389945</APP_LABEL_ID>
+     <LABEL_TEXT>Minimum length of the password should be more than 10 characters.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>-5389945</APP_LABEL_ID>
+     <LABEL_TEXT>Minimum length of the password should be more than 10 characters.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>-5389945</APP_LABEL_ID>
+     <LABEL_TEXT>Minimum length of the password should be more than 10 characters.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>-5389945</APP_LABEL_ID>
+     <LABEL_TEXT>Minimum length of the password should be more than 10 characters.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>20</APP_LANG_ID>
+     <APP_LABEL_ID>-5389945</APP_LABEL_ID>
+     <LABEL_TEXT>Minimum length of the password should be more than 10 characters.</LABEL_TEXT>
+    </T_LABEL>
+   </LIST_LABEL>
+   <LIST_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>-5389944</APP_LABEL_ID>
+     <LABEL_TEXT>[FirstName],
+
+Welcome back to OneVizion - your account has been reactivated!
+
+If you have forgotten your password, access [WEBSITE] and press the &quot;Unable to login?&quot; link.
+Enter your email address and your login credentials will be sent to you.
+
+Please feel free to look through our documentation on http://wiki.onevizion.com.
+
+Thank you,
+OneVizion Support</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>-5389944</APP_LABEL_ID>
+     <LABEL_TEXT>[FirstName],
+
+Welcome back to OneVizion - your account has been reactivated!
+
+If you have forgotten your password, access [WEBSITE] and press the &quot;Unable to login?&quot; link.
+Enter your email address and your login credentials will be sent to you.
+
+Please feel free to look through our documentation on http://wiki.onevizion.com.
+
+Thank you,
+OneVizion Support</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>-5389944</APP_LABEL_ID>
+     <LABEL_TEXT>[FirstName],
+
+Welcome back to OneVizion - your account has been reactivated!
+
+If you have forgotten your password, access [WEBSITE] and press the &quot;Unable to login?&quot; link.
+Enter your email address and your login credentials will be sent to you.
+
+Please feel free to look through our documentation on http://wiki.onevizion.com.
+
+Thank you,
+OneVizion Support</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>-5389944</APP_LABEL_ID>
+     <LABEL_TEXT>[FirstName],
+
+Welcome back to OneVizion - your account has been reactivated!
+
+If you have forgotten your password, access [WEBSITE] and press the &quot;Unable to login?&quot; link.
+Enter your email address and your login credentials will be sent to you.
+
+Please feel free to look through our documentation on http://wiki.onevizion.com.
+
+Thank you,
+OneVizion Support</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>20</APP_LANG_ID>
+     <APP_LABEL_ID>-5389944</APP_LABEL_ID>
+     <LABEL_TEXT>[FirstName],
+
+Welcome back to OneVizion - your account has been reactivated!
+
+If you have forgotten your password, access [WEBSITE] and press the &quot;Unable to login?&quot; link.
+Enter your email address and your login credentials will be sent to you.
+
+Please feel free to look through our documentation on http://wiki.onevizion.com.
+
+Thank you,
+OneVizion Support</LABEL_TEXT>
+    </T_LABEL>
+   </LIST_LABEL>
+   <LIST_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>-5389943</APP_LABEL_ID>
+     <LABEL_TEXT>[FirstName],
+
+Your password has been reset by an administrator.
+
+To access OneVizion:
+
+1. Go to the website https://[WEBSITE].
+2. Enter your Username and Password provided below and click &quot;Log In&quot;.
+3. Once logged in, you will be required to change the system-generated password.
+
+Username: [PSUN]
+Password: [PSPWD]
+
+(Note, you may need to turn off the pop-up blocker or add this website to your allowed sites list to be able to fully use OneVizion.)
+
+Please feel free to look through our documentation at http://wiki.onevizion.com.
+
+Thank you,
+OneVizion Support</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>-5389943</APP_LABEL_ID>
+     <LABEL_TEXT>[FirstName],
+
+Your password has been reset by an administrator.
+
+To access OneVizion:
+
+1. Go to the website https://[WEBSITE].
+2. Enter your Username and Password provided below and click &quot;Log In&quot;.
+3. Once logged in, you will be required to change the system-generated password.
+
+Username: [PSUN]
+Password: [PSPWD]
+
+(Note, you may need to turn off the pop-up blocker or add this website to your allowed sites list to be able to fully use OneVizion.)
+
+Please feel free to look through our documentation at http://wiki.onevizion.com.
+
+Thank you,
+OneVizion Support</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>-5389943</APP_LABEL_ID>
+     <LABEL_TEXT>[FirstName],
+
+Your password has been reset by an administrator.
+
+To access OneVizion:
+
+1. Go to the website https://[WEBSITE].
+2. Enter your Username and Password provided below and click &quot;Log In&quot;.
+3. Once logged in, you will be required to change the system-generated password.
+
+Username: [PSUN]
+Password: [PSPWD]
+
+(Note, you may need to turn off the pop-up blocker or add this website to your allowed sites list to be able to fully use OneVizion.)
+
+Please feel free to look through our documentation at http://wiki.onevizion.com.
+
+Thank you,
+OneVizion Support</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>-5389943</APP_LABEL_ID>
+     <LABEL_TEXT>[FirstName],
+
+Your password has been reset by an administrator.
+
+To access OneVizion:
+
+1. Go to the website https://[WEBSITE].
+2. Enter your Username and Password provided below and click &quot;Log In&quot;.
+3. Once logged in, you will be required to change the system-generated password.
+
+Username: [PSUN]
+Password: [PSPWD]
+
+(Note, you may need to turn off the pop-up blocker or add this website to your allowed sites list to be able to fully use OneVizion.)
+
+Please feel free to look through our documentation at http://wiki.onevizion.com.
+
+Thank you,
+OneVizion Support</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>20</APP_LANG_ID>
+     <APP_LABEL_ID>-5389943</APP_LABEL_ID>
+     <LABEL_TEXT>[FirstName],
+
+Your password has been reset by an administrator.
+
+To access OneVizion:
+
+1. Go to the website https://[WEBSITE].
+2. Enter your Username and Password provided below and click &quot;Log In&quot;.
+3. Once logged in, you will be required to change the system-generated password.
+
+Username: [PSUN]
+Password: [PSPWD]
+
+(Note, you may need to turn off the pop-up blocker or add this website to your allowed sites list to be able to fully use OneVizion.)
+
+Please feel free to look through our documentation at http://wiki.onevizion.com.
+
+Thank you,
+OneVizion Support</LABEL_TEXT>
+    </T_LABEL>
+   </LIST_LABEL>
+   <LIST_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>-5389942</APP_LABEL_ID>
+     <LABEL_TEXT>Usage Statistics: </LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>-5389942</APP_LABEL_ID>
+     <LABEL_TEXT>Usage Statistics: </LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>-5389942</APP_LABEL_ID>
+     <LABEL_TEXT>Usage Statistics: </LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>-5389942</APP_LABEL_ID>
+     <LABEL_TEXT>Usage Statistics: </LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>20</APP_LANG_ID>
+     <APP_LABEL_ID>-5389942</APP_LABEL_ID>
+     <LABEL_TEXT>Usage Statistics: </LABEL_TEXT>
+    </T_LABEL>
+   </LIST_LABEL>
+   <LIST_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>-5389941</APP_LABEL_ID>
+     <LABEL_TEXT>Your account {p_rec_un} on {p_site_name}, will expire in {p_days} days.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>-5389941</APP_LABEL_ID>
+     <LABEL_TEXT>Your account {p_rec_un} on {p_site_name}, will expire in {p_days} days.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>-5389941</APP_LABEL_ID>
+     <LABEL_TEXT>Your account {p_rec_un} on {p_site_name}, will expire in {p_days} days.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>-5389941</APP_LABEL_ID>
+     <LABEL_TEXT>Your account {p_rec_un} on {p_site_name}, will expire in {p_days} days.</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>20</APP_LANG_ID>
+     <APP_LABEL_ID>-5389941</APP_LABEL_ID>
+     <LABEL_TEXT>Your account {p_rec_un} on {p_site_name}, will expire in {p_days} days.</LABEL_TEXT>
+    </T_LABEL>
+   </LIST_LABEL>
+   <LIST_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>-5389940</APP_LABEL_ID>
+     <LABEL_TEXT>Reset Password - </LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>-5389940</APP_LABEL_ID>
+     <LABEL_TEXT>Reset Password - </LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>-5389940</APP_LABEL_ID>
+     <LABEL_TEXT>Reset Password - </LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>10</APP_LANG_ID>
+     <APP_LABEL_ID>-5389940</APP_LABEL_ID>
+     <LABEL_TEXT>Reset Password - </LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>20</APP_LANG_ID>
+     <APP_LABEL_ID>-5389940</APP_LABEL_ID>
+     <LABEL_TEXT>Reset Password - </LABEL_TEXT>
+    </T_LABEL>
+   </LIST_LABEL>
+  </COMPONENT_LABELS>
+ </DB_PACKAGES_ITEM>
+</DB_PACKAGES>
+</COMPONENTS>

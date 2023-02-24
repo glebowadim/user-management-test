@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><COMPONENTS author="user_managment_02_admin" description="" name="test.onevizion.com_BPL_01302023204131.xml" site="http&#x3a;&#x2f;&#x2f;dev2.vqs.net&#x3a;8080" ts="" ><XITOR_TYPES>
+<?xml version="1.0" encoding="UTF-8"?><COMPONENTS author="user_managment_02_admin" description="" name="010.Trackor-Type.xml" site="http&#x3a;&#x2f;&#x2f;dev2.vqs.net&#x3a;8080" ts="" ><XITOR_TYPES>
  <XITOR_TYPES_ITEM>
   <APPLET_LABEL>
    <T_LABEL>
@@ -143,7 +143,7 @@
     <LABEL_TEXT>Classe d&apos;utilisateurs</LABEL_TEXT>
    </T_LABEL>
   </XITOR_CLASS_LABEL>
-  <XITOR_TYPE>Users</XITOR_TYPE>
+  <XITOR_TYPE>UMGMT_Users</XITOR_TYPE>
   <XITOR_TYPE_ID>167343</XITOR_TYPE_ID>
   <XITOR_CLASSES/>
   <TM_SETUPS>
@@ -196,9 +196,9 @@
     <IS_LOCKABLE>0</IS_LOCKABLE>
     <SHOW_ALL_IN_TRCONTAINER>0</SHOW_ALL_IN_TRCONTAINER>
     <USE_IN_SELF_SERVICE_IMP>0</USE_IN_SELF_SERVICE_IMP>
-    <CHILD_TRACKOR_TYPE>Users</CHILD_TRACKOR_TYPE>
+    <CHILD_TRACKOR_TYPE>UMGMT_Users</CHILD_TRACKOR_TYPE>
     <UNIQUE_BY_XT_ID>167343</UNIQUE_BY_XT_ID>
-    <UNIQUE_TRACKOR_TYPE>Users</UNIQUE_TRACKOR_TYPE>
+    <UNIQUE_TRACKOR_TYPE>UMGMT_Users</UNIQUE_TRACKOR_TYPE>
    </T_BPL_RELATION_TYPE>
   </PARENT_RELATION_TYPES>
   <CHAT_SUPPORTED>0</CHAT_SUPPORTED>
