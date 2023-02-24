@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><COMPONENTS author="user_managment_02_admin" description="" name="050.Menu.xml" site="http&#x3a;&#x2f;&#x2f;dev2.vqs.net&#x3a;8080" ts="" ><MENU>
+<?xml version="1.0" encoding="UTF-8"?><COMPONENTS author="user_managment_02_admin" description="" name="040.Menu.xml" site="http&#x3a;&#x2f;&#x2f;dev2.vqs.net&#x3a;8080" ts="" ><MENU>
  <MENU_ITEM>
   <APPLICATION_ID>1001027746</APPLICATION_ID>
   <NAME>UMGMT Administrator</NAME>
@@ -85,6 +85,17 @@
    </T_MENU_XREF>
   </MENU_XREFS>
   <BPD_ITEMS/>
+  <COMPONENT_PACKAGES>
+   <T_BPL_COMP_PKG>
+    <COMPONENT_ID>3</COMPONENT_ID>
+    <OBJECT_ID>1001075201</OBJECT_ID>
+    <COMPONENTS_PACKAGE_ID>189555</COMPONENTS_PACKAGE_ID>
+    <NAME>VP - User Management</NAME>
+    <PROGRAM_ID>1000979402</PROGRAM_ID>
+    <BPD_ITEMS/>
+    <IS_LOCKED>0</IS_LOCKED>
+   </T_BPL_COMP_PKG>
+  </COMPONENT_PACKAGES>
  </MENU_ITEM>
 </MENU>
 </COMPONENTS>
